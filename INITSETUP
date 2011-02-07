@@ -1,0 +1,34 @@
+Git Setup
+=========
+Global setup:
+
+ Download and install Git
+  git config --global user.name "Your Name"
+  git config --global user.email dhydrated@gmail.com
+        
+
+Next steps:
+
+  mkdir slides
+  cd slides
+  git init
+  touch README
+  git add README
+  git commit -m 'first commit'
+  git remote add origin git@github.com:dhydrated/slides.git OR https://dhydrated@github.com/dhydrated/slide.git
+  git push origin master
+      
+
+Existing Git Repo?
+
+  cd existing_git_repo
+  git remote add origin git@github.com:dhydrated/slides.git OR https://dhydrated@github.com/dhydrated/slides.git
+  git push origin master
+      
+
+GWT Setup
+=========
+
+$GWT_HOME/webAppCreator -out slides -junit "/home/taufekj/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar" org.dhydrated.app.slides.CleanCode -maven
+
+
