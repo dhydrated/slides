@@ -1,6 +1,7 @@
 package org.dhydrated.app.slides.client.model;
 
 import com.extjs.gxt.ui.client.data.BaseTreeModel;
+import com.extjs.gxt.ui.client.widget.LayoutContainer;
 
 public class TreeMenuItem extends BaseTreeModel {
 
@@ -13,9 +14,10 @@ public class TreeMenuItem extends BaseTreeModel {
 		set("name", name);
 	}
 
-	public TreeMenuItem(String name, String description) {
+	public TreeMenuItem(String name, String description, LayoutContainer page) {
 		set("name", name);
 		set("description", description);
+		set("page", page);
 	}
 
 	public String getName() {
@@ -24,6 +26,10 @@ public class TreeMenuItem extends BaseTreeModel {
 
 	public String getDescription() {
 		return (String) get("description");
+	}
+
+	public LayoutContainer getPage() {
+		return (LayoutContainer) get("page");
 	}
 
 	public String toString() {

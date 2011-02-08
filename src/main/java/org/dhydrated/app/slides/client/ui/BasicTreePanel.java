@@ -1,20 +1,20 @@
 package org.dhydrated.app.slides.client.ui;
 
 import org.dhydrated.app.slides.client.Resources;
-import org.dhydrated.app.slides.client.TestData;
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
 import org.dhydrated.app.slides.client.resources.DataProvider;
 
+import com.extjs.gxt.ui.client.Style.Direction;
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.fx.FxConfig;
 import com.extjs.gxt.ui.client.store.TreeStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.extjs.gxt.ui.client.widget.layout.FlowData;
@@ -54,13 +54,14 @@ public class BasicTreePanel extends LayoutContainer {
 			@Override
 			public void selectionChanged(SelectionChangedEvent<ModelData> se) {
 				
-//				MessageBox.info("Message", "Hello World!!", null); 
-				if (se.getSelectedItem() != null) {
+				if (se.getSelectedItem() != null && se.getSelectedItem() instanceof TreeMenuItem) {
+					getPanel().removeAll();
 					ModelData record = se.getSelectedItem();
 					TreeMenuItem item = (TreeMenuItem) record;
 					getPanel().setHeading(item.getName());
-					//			          Explorer.showPage(entry);
-					//			          dataView.getSelectionModel().deselectAll();
+					getPanel().add(item.getPage());
+					getPanel().layout();
+					getPanel().el().slideIn(Direction.DOWN, FxConfig.NONE);
 				}
 			}
 		});

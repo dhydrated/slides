@@ -2,6 +2,7 @@ package org.dhydrated.app.slides.client;
 
 
 import org.dhydrated.app.slides.client.ui.CustomBorderLayout;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -35,6 +36,12 @@ public class CleanCode implements EntryPoint {
 	  
 	  RootPanel.get().add(cbl);
 	  cbl.layout();
+	  
+	 /* Page1 page = new Page1();
+	  
+	  RootPanel.get().add(page);
+	  
+	  page.layout();*/
 	  
 //	  MessageBox.info("Message", "Hello World!!", null); 
 
