@@ -2,7 +2,6 @@ package org.dhydrated.app.slides.client;
 
 
 import org.dhydrated.app.slides.client.ui.CustomBorderLayout;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -16,7 +15,7 @@ public class CleanCode implements EntryPoint {
    * This is the entry point method.
    */
   public void onModuleLoad() {
-	  
+
 	 /* ContentPanel cp = new ContentPanel();
 	  cp.setHeading("Folder Contents");
 	  cp.setSize(250,140);

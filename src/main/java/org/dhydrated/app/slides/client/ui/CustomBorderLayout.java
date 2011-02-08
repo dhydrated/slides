@@ -20,7 +20,7 @@ public class CustomBorderLayout extends LayoutContainer {
 
 		ContentPanel west = new ContentPanel();
 		ContentPanel center = new ContentPanel();
-		center.setHeading("BorderLayout Example");
+		center.setHeading("");
 		center.setScrollMode(Scroll.AUTOX);
 
 		FlexTable table = new FlexTable();
@@ -28,12 +28,12 @@ public class CustomBorderLayout extends LayoutContainer {
 		table.setCellSpacing(8);
 		table.setCellPadding(4);
 
-		BorderLayoutData westData = new BorderLayoutData(LayoutRegion.WEST, 150);
+		BorderLayoutData westData = new BorderLayoutData(LayoutRegion.WEST, 200);
 		westData.setSplit(true);
 		westData.setCollapsible(true);
 		westData.setMargins(new Margins(5));
 		
-		west.add(new BasicTreePanel());
+		west.add(new BasicTreePanel(center));
 		
 		BorderLayoutData centerData = new BorderLayoutData(LayoutRegion.CENTER);
 		centerData.setMargins(new Margins(5));
