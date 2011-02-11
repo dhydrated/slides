@@ -1,0 +1,35 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.dhydrated.app.slides:CleanCode:war:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-resources-plugin is missing. @ line 91, column 33
+[WARNING] 'build.plugins.plugin.version' for org.mortbay.jetty:jetty-maven-plugin is missing. @ line 119, column 33
+[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:tomcat-maven-plugin is missing. @ line 115, column 33
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-deploy-plugin is missing. @ line 111, column 33
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 82, column 33
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-invoker-plugin is missing. @ line 161, column 33
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-surefire-plugin is missing. @ line 98, column 33
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-war-plugin is missing. @ line 74, column 33
+[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:gwt-maven-plugin is missing. @ line 128, column 33
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.dhydrated.app.slides.CleanCode 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.1:copy-dependencies (default-cli) @ CleanCode ---
+[INFO] Copying gxt-2.2.0.jar to /home/taufekj/workspaces/java-ws/slides/target/dependency/gxt.jar
+[INFO] Copying gwt-dev-2.1.1.jar to /home/taufekj/workspaces/java-ws/slides/target/dependency/gwt-dev.jar
+[INFO] Copying gwt-servlet-2.1.1.jar to /home/taufekj/workspaces/java-ws/slides/target/dependency/gwt-servlet.jar
+[INFO] Copying gwt-user-2.1.1.jar to /home/taufekj/workspaces/java-ws/slides/target/dependency/gwt-user.jar
+[INFO] Copying junit-4.4.jar to /home/taufekj/workspaces/java-ws/slides/target/dependency/junit.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.607s
+[INFO] Finished at: Fri Feb 11 19:04:16 MYT 2011
+[INFO] Final Memory: 6M/90M
+[INFO] ------------------------------------------------------------------------
