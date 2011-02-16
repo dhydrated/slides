@@ -2,7 +2,6 @@ package org.dhydrated.app.slides.client;
 
 import org.dhydrated.app.slides.client.ui.CustomBorderLayout;
 
-import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -18,10 +17,13 @@ public class CleanCode implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 
-		buildApp();
+		displayPage();
+
+		hideLoadingBar();
 	}
 
-	private void buildApp() {
+	private void displayPage() {
+
 
 		/*
 		 * ContentPanel cp = new ContentPanel();
@@ -35,13 +37,6 @@ public class CleanCode implements EntryPoint {
 		 * cp.layout();
 		 */
 
-		CustomBorderLayout cbl = new CustomBorderLayout();
-
-		RootPanel.get().add(cbl);
-		cbl.layout();
-
-		hideLoadingIndicator();
-
 		/*
 		 * Page1 page = new Page1();
 		 * 
@@ -51,19 +46,23 @@ public class CleanCode implements EntryPoint {
 		 */
 
 		// MessageBox.info("Message", "Hello World!!", null);
+
+		
+		CustomBorderLayout cbl = new CustomBorderLayout();
+
+		RootPanel.get().add(cbl);
+		cbl.layout();
 	}
 
-	private void hideLoadingIndicator() {
-		NodeList<Element> list = RootPanel.getBodyElement()
-				.getElementsByTagName("div");
-		String names = "";
-		for (int i = 0; i < list.getLength(); i++) {
+	private void hideLoadingBar() {
 
-			Element el = list.getItem(i);
-			names += el.getId() + ", ";
-			if (el.getId().equals("loading")) {
-				el.setAttribute("style", "display:none");
-				break;
+		NodeList<Element> elements = RootPanel.getBodyElement()
+				.getElementsByTagName("div");
+
+		for (int i = 0; i < elements.getLength(); i++) {
+			Element element = elements.getItem(i);
+			if (element.getId().equals("loading")) {
+				element.setAttribute("style", "display:none");
 			}
 		}
 	}

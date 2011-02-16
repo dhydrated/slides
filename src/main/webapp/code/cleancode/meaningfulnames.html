@@ -1,0 +1,56 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../css/SyntaxHighlighter.css" type="text/css" />
+<script src="../../js/shCore.js"></script>
+<script src="../../js/shBrushJava.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+<style>
+* {
+font-family:monospace;
+  padding: 0px;
+  margin: 0px;
+  white-space: nowrap;
+  font-size: 11px;
+}
+body {
+  border: none;
+}
+.dp-highlighter {
+  white-space: nowrap;
+  overflow: visible;
+  font-size: 11px;  
+  font-family:monospace;
+}
+.dp-highlighter ol, .dp-highlighter ol li {
+  font-family:monospace;
+}
+</style>
+</head>
+<body>
+<a id="sample1" name="sample1"></a>
+<br/>
+<textarea name="code" class="java:nogutter:nocontrols" >
+int d; // elapsed time in days
+</textarea>
+
+<br/>
+
+<a id="sample2" name="sample2"></a>
+<br/>
+<textarea name="code" class="java:nogutter:nocontrols"  >
+public List<int[]> getThem() {
+	List<int[]> list1 = new ArrayList<int[]>();
+	for (int[] x : theList)
+		if (x[0] == 4)
+			list1.add(x);
+	return list1;
+}
+</textarea>
+
+
+</body>
+</html>

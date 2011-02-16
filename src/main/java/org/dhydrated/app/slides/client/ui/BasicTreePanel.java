@@ -8,6 +8,9 @@ import org.dhydrated.app.slides.client.resources.DataProvider;
 import com.extjs.gxt.ui.client.Style.Direction;
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.KeyListener;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -19,6 +22,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.extjs.gxt.ui.client.widget.layout.FlowData;
 import com.extjs.gxt.ui.client.widget.treepanel.TreePanel;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 
 public class BasicTreePanel extends LayoutContainer {
@@ -65,7 +69,8 @@ public class BasicTreePanel extends LayoutContainer {
 				}
 			}
 		});
-
+		
+		
 		ButtonBar buttonBar = new ButtonBar();
 
 		buttonBar.add(new Button("Expand All",
@@ -80,6 +85,33 @@ public class BasicTreePanel extends LayoutContainer {
 						tree.collapseAll();
 					}
 				}));
+		
+		
+		/*addListener(Events.KeyDown, new KeyListener(){
+
+			@Override
+			public void componentKeyDown(ComponentEvent event) {
+				// TODO Auto-generated method stub
+				super.componentKeyDown(event);
+
+				GWT.log("componentKeyDown keycode: " + event.getKeyCode());
+				
+//				MessageBox.info("componentKeyDown test", "keycode: " + event.getKeyCode(), null);
+				
+			}
+
+			@Override
+			public void handleEvent(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				super.handleEvent(e);
+
+				GWT.log("handleEvent keycode: " + e.getKeyCode());
+				
+//				MessageBox.info("handleEvent test", "keycode: " + e.getKeyCode(), null);
+			}
+			
+			
+		});*/
 
 		add(buttonBar, new FlowData(10));
 		add(tree, new FlowData(10));

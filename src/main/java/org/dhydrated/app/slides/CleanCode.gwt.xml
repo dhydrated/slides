@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module>
+<module rename-to='cleancode'>
   <!-- Inherit the core Web Toolkit stuff.                        --><!--
   <inherits name='com.google.gwt.user.User'/>
 
@@ -18,9 +18,8 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
-  <!--<inherits name="com.google.gwt.junit.JUnit"/>
-  --><inherits name='com.extjs.gxt.themes.Themes' />
-  <inherits name="com.extjs.gxt.ui.GXT"/>
+  <inherits name="com.google.gwt.junit.JUnit"/>
   <inherits name="org.dhydrated.app.slides.CleanCode"/>
+  <inherits name="com.extjs.gxt.ui.GXT"/>
 
 </module>
