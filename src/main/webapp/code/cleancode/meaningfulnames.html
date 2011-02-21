@@ -31,25 +31,117 @@ body {
 </style>
 </head>
 <body>
-<a id="sample1" name="sample1"></a>
+
 <br/>
+
+<a name="bad_sample_1"></a>
 <textarea name="code" class="php:nogutter:nocontrols" >
-private $d; // date
+//bad
+private $cdate; // created date
+private $udate; // updated date
 </textarea>
 
 <br/>
 
-<a id="sample2" name="sample2"></a>
+<a name="good_sample_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//good
+private $createdDate; 
+private $updatedDate;
+</textarea>
+
 <br/>
+
+<a name="bad_sample_2"></a>
 <textarea name="code" class="php:nogutter:nocontrols"  >
-$list = new array();
-foreach ($results : $obj){
-	if ($obj->status == 1){
-			list[] = $obj
+//bad
+public function getThem(){
+
+	$list = new array();
+	foreach ($this->results as $obj){
+		if ($obj->status == 1
+		    && $obj->type == 2){
+				$list[] = $obj;
+		}
 	}
-return list;
+	return $list;
+}
 </textarea>
 
+<br/>
+
+<a name="good_sample_2"></a>
+<textarea name="code" class="php:nogutter:nocontrols"  >
+//good
+public function getActiveDevelopers(){
+
+	$activeDevelopers = new array();
+	foreach ($this->allEmployees as $employee){
+		if ($employee->status == ACTIVE
+		    && $employee->type == DEVELOPER){
+				$activeDevelopers[] = $employee;
+		}
+	}
+	return $activeDevelopers;
+}
+</textarea>
+
+<br/>
+
+<a name="bad_sample_number_series"></a>
+<textarea name="code" class="php:nogutter:nocontrols"  >
+//bad
+public function copyMyArray($array1, $array2){
+
+	for ($i=0; $i &lt sizeof($array1); i++){
+		if ($array1[i] !=== ''
+		    && $array1[i] !== 'N/A'){
+				$array2[] = $array1;
+		}
+	}
+	return $array2;
+}
+</textarea>
+
+<br/>
+
+<a name="good_sample_number_series"></a>
+<textarea name="code" class="php:nogutter:nocontrols"  >
+//good
+public function copyMyArray($source, $destination){
+
+	for ($i=0; $i &lt sizeof($source); i++){
+		if ($source[i] !=== ''
+		    && $source[i] !== 'N/A'){
+				$destination[] = $source;
+		}
+	}
+	return $destination;
+}
+</textarea>
+
+<br/>
+
+<a name="bad_sample_noise_words"></a>
+<textarea name="code" class="php:nogutter:nocontrols"  >
+//bad
+private $module;
+private $moduleInfo;
+private $moduleData;
+</textarea>
+
+<br/>
+
+<a name="bad_sample_pronounceable_words"></a>
+<textarea name="code" class="php:nogutter:nocontrols"  >
+//bad
+private $sfh; // SalesforceHandler
+private $mi; // ManagerInterface
+private $mod; // Module
+private $ai; //AttributeInterface
+</textarea>
+
+<br/>
 
 </body>
 </html>

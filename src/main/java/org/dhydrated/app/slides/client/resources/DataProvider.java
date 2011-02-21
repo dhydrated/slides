@@ -2,22 +2,22 @@ package org.dhydrated.app.slides.client.resources;
 
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
-import org.dhydrated.app.slides.client.page.MeaningfulNames;
-import org.dhydrated.app.slides.client.page.Page2;
+import org.dhydrated.app.slides.client.page.IntentionRevealingNames;
+import org.dhydrated.app.slides.client.page.NamesToAvoid;
 
 public class DataProvider {
 
 	 public static Folder getFolders() {
 		 
 		    Folder[] folders = new Folder[] {
-		        new Folder("Presentation",
+		        new Folder("Clean Code",
 		            new Folder[] {
 
-		                new Folder("Clean Code",
+		                new Folder("Meaningful Names",
 		                    new TreeMenuItem[] {
-		                        new TreeMenuItem("Meaningful Names", "Meaningful Names", new MeaningfulNames()),
-		                        new TreeMenuItem("Three String Quartets", "Beethoven", new Page2()),
-		                        new TreeMenuItem("Grosse Fugue for String Quartets", "Beethoven", new MeaningfulNames()),})
+		                        new TreeMenuItem("Intention Revealing Names", "Intention Revealing Names", new IntentionRevealingNames()),
+		                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
+		                    })
 		                }),
 		        };
 

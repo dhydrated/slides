@@ -65,7 +65,7 @@ public class BasicTreePanel extends LayoutContainer {
 					getPanel().setHeading(item.getName());
 					getPanel().add(item.getPage());
 					getPanel().layout();
-					getPanel().el().slideIn(Direction.DOWN, FxConfig.NONE);
+//					getPanel().el().slideIn(Direction.DOWN, FxConfig.NONE);
 				}
 			}
 		});
