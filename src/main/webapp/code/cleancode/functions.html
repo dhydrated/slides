@@ -1,0 +1,84 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../css/samplecodes.css" type="text/css" />
+<script src="../../js/shCore.js"></script>
+<script src="../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="bad_sample_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//bad
+function callApi() 
+{
+    // Build request
+    $call = array(
+        'method' => $this->method,
+        'params' => $this->parameters,
+        'id' => $this->id, 
+        );
+
+    // Convert the php values to a json string
+    $request = json_encode($call);
+
+    // Prepare http client
+   	$client = new Zend_Http_Client();
+   	$client->setUri($this->endpointUrl);
+   	$client->setConfig(array('timeout'=> 30));    	
+   	$client->setRawData($this->jsonRequest
+   						, 'application/json');
+    
+    // Make the api call
+   	$response = $client->request('POST');
+    $this->jsonResponse =  $response->getBody();
+    
+    // Decode the result
+    return json_decode($response, true);
+}
+</textarea>
+
+<br/>
+
+<a name="good_sample_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//bad
+function callApi() 
+{
+    $this->marshalRequest();
+
+    $this->buildHttpClient();
+    
+    $this->callApi();
+    
+    $this->unmarshalRequest();
+}
+</textarea>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+</body>
+</html>

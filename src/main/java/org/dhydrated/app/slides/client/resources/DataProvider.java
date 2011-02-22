@@ -4,6 +4,7 @@ import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
 import org.dhydrated.app.slides.client.page.IntentionRevealingNames;
 import org.dhydrated.app.slides.client.page.NamesToAvoid;
+import org.dhydrated.app.slides.client.page.SmallFunction;
 
 public class DataProvider {
 
@@ -17,7 +18,14 @@ public class DataProvider {
 		                    new TreeMenuItem[] {
 		                        new TreeMenuItem("Intention Revealing Names", "Intention Revealing Names", new IntentionRevealingNames()),
 		                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
-		                    })
+		                    }),
+		                  
+	                    new Folder("Functions/Methods",
+			                    new TreeMenuItem[] {
+			                        new TreeMenuItem("Small", "Small", new SmallFunction()),
+			                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
+			                    })
+		                    
 		                }),
 		        };
 
