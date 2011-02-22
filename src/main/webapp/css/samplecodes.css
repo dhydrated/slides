@@ -1,0 +1,22 @@
+* {
+	font-family: monospace;
+	padding: 0px;
+	margin: 0px;
+	white-space: nowrap;
+	font-size: 13px;
+}
+
+body {
+	border: none;
+}
+
+.dp-highlighter {
+	white-space: nowrap;
+	overflow: visible;
+	font-size: 11px;
+	font-family: monospace;
+}
+
+.dp-highlighter ol,.dp-highlighter ol li {
+	font-family: monospace;
+}

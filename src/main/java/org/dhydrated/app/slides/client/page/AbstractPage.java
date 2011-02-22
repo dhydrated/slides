@@ -8,8 +8,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractPage extends LayoutContainer {
 
-	private static String FRAME_WIDTH = "800px";
-	private static String FRAME_SHORT_WIDTH = "400px";
+	private static String FRAME_WIDTH = "900px";
+	private static String FRAME_SHORT_WIDTH = "445px";
 	private static int FRAME_BORDER = 0;
 	private static String FRAME_SCROLL = "no";
 

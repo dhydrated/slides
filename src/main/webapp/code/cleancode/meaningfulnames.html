@@ -1,6 +1,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../css/samplecodes.css" type="text/css" />
 <script src="../../js/shCore.js"></script>
 <script src="../../js/shBrushPhp.js"></script>
 <script>
@@ -8,27 +9,6 @@
       dp.SyntaxHighlighter.HighlightAll("code");
     }
 </script>
-<style>
-* {
-font-family:monospace;
-  padding: 0px;
-  margin: 0px;
-  white-space: nowrap;
-  font-size: 11px;
-}
-body {
-  border: none;
-}
-.dp-highlighter {
-  white-space: nowrap;
-  overflow: visible;
-  font-size: 11px;  
-  font-family:monospace;
-}
-.dp-highlighter ol, .dp-highlighter ol li {
-  font-family:monospace;
-}
-</style>
 </head>
 <body>
 
@@ -61,6 +41,7 @@ public function getThem(){
 	foreach ($this->results as $obj){
 		if ($obj->status == 1
 		    && $obj->type == 2){
+		    
 				$list[] = $obj;
 		}
 	}
@@ -79,6 +60,7 @@ public function getActiveDevelopers(){
 	foreach ($this->allEmployees as $employee){
 		if ($employee->status == ACTIVE
 		    && $employee->type == DEVELOPER){
+				
 				$activeDevelopers[] = $employee;
 		}
 	}
@@ -94,8 +76,9 @@ public function getActiveDevelopers(){
 public function copyMyArray($array1, $array2){
 
 	for ($i=0; $i &lt sizeof($array1); i++){
-		if ($array1[i] !=== ''
-		    && $array1[i] !== 'N/A'){
+		if ($array1[i] !=== '' 
+			&& $array1[i] !== 'N/A'){
+			
 				$array2[] = $array1;
 		}
 	}
@@ -111,8 +94,9 @@ public function copyMyArray($array1, $array2){
 public function copyMyArray($source, $destination){
 
 	for ($i=0; $i &lt sizeof($source); i++){
-		if ($source[i] !=== ''
-		    && $source[i] !== 'N/A'){
+		if ($source[i] !=== '' 
+			&& $source[i] !== 'N/A'){
+			
 				$destination[] = $source;
 		}
 	}

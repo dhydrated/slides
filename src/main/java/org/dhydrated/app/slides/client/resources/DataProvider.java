@@ -13,7 +13,7 @@ public class DataProvider {
 		        new Folder("Clean Code",
 		            new Folder[] {
 
-		                new Folder("Meaningful Names",
+		                new Folder("Naming Your Stuff",
 		                    new TreeMenuItem[] {
 		                        new TreeMenuItem("Intention Revealing Names", "Intention Revealing Names", new IntentionRevealingNames()),
 		                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
