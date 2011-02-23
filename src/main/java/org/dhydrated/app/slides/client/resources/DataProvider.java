@@ -2,9 +2,10 @@ package org.dhydrated.app.slides.client.resources;
 
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
-import org.dhydrated.app.slides.client.page.IntentionRevealingNames;
-import org.dhydrated.app.slides.client.page.NamesToAvoid;
-import org.dhydrated.app.slides.client.page.SmallFunction;
+import org.dhydrated.app.slides.client.page.function.Function;
+import org.dhydrated.app.slides.client.page.function.FunctionArgument;
+import org.dhydrated.app.slides.client.page.name.IntentionRevealingNames;
+import org.dhydrated.app.slides.client.page.name.NamesToAvoid;
 
 public class DataProvider {
 
@@ -20,10 +21,10 @@ public class DataProvider {
 		                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
 		                    }),
 		                  
-	                    new Folder("Functions/Methods",
+	                    new Folder("How Function Should Be",
 			                    new TreeMenuItem[] {
-			                        new TreeMenuItem("Small", "Small", new SmallFunction()),
-			                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
+			                        new TreeMenuItem("Function", "Function", new Function()),
+			                        new TreeMenuItem("Arguments", "Arguments", new FunctionArgument())
 			                    })
 		                    
 		                }),

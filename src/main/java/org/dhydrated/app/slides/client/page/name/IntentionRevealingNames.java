@@ -1,4 +1,6 @@
-package org.dhydrated.app.slides.client.page;
+package org.dhydrated.app.slides.client.page.name;
+
+import org.dhydrated.app.slides.client.page.AbstractPage;
 
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.google.gwt.user.client.Element;

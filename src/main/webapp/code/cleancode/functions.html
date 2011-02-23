@@ -16,8 +16,8 @@
 
 <a name="bad_sample_1"></a>
 <textarea name="code" class="php:nogutter:nocontrols" >
-//bad
-function callApi() 
+//BAD
+function call() 
 {
     // Build request
     $call = array(
@@ -49,8 +49,8 @@ function callApi()
 
 <a name="good_sample_1"></a>
 <textarea name="code" class="php:nogutter:nocontrols" >
-//bad
-function callApi() 
+//GOOD
+function callPartnerService() 
 {
     $this->marshalRequest();
 
@@ -60,6 +60,8 @@ function callApi()
     
     $this->unmarshalRequest();
 }
+
+...
 </textarea>
 
 <br/>
