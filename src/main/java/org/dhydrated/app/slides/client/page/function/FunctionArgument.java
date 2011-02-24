@@ -19,11 +19,12 @@ public class FunctionArgument extends AbstractPage {
 	    vp.addText("<p>");
 	    vp.addText("<ul>");
 	    vp.addText("<li>Ideal arguments is NONE.</li>");
+	    vp.add(longFrame("function_argument_one_argument", "50px"));
 	    vp.addText("<li>Next comes one or two but avoid using 3 arguments.</li>");
-	    vp.addText("<li>Use object as argument if you try to use > 2 arguments.</li>");
-	    vp.addText("<li>Harder to read with arguments.</li>");
-	    vp.addText("<li>More argument.</li>");
-	    vp.add(addToHorizontalPanel(shortFrame("#bad_sample_1", "420px"), shortFrame("#good_sample_1", "420px")));
+	    vp.add(longFrame("function_argument_two_argument", "50px"));
+	    vp.addText("<li>Harder to read and test with more arguments.</li>");
+	    vp.addText("<li>Use object to replace long list arguments.</li>");
+	    vp.add(addToHorizontalPanel(shortFrame("bad_function_argument_1", "50px"), shortFrame("good_function_argument_1", "50px")));
 	    vp.addText("<br/>");
 	    vp.addText("<ul>");
 	    vp.addText("</p>");

@@ -65,6 +65,41 @@ function callPartnerService()
 </textarea>
 
 <br/>
+
+<a name="function_argument_one_argument"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+function renderPageWithHtml(){
+...
+</textarea>
+
+<br/>
+
+<a name="function_argument_two_argument"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+function renderPageWithHtml(Page $page, HtmlBuilder $htmlBuilder){
+...
+</textarea>
+
+<br/>
+
+<a name="bad_function_argument_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//BAD
+function drawRectangle(int $x, int $y){
+...
+</textarea>
+
+<br/>
+
+<a name="good_function_argument_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//GOOD
+function drawRectangle(Size $size){
+...
+</textarea>
+
+<br/>
+
 <br/>
 <br/>
 <br/>

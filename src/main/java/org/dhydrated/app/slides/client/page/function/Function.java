@@ -23,7 +23,7 @@ public class Function extends AbstractPage {
 	    vp.addText("<li>One level of abstraction.</li>");
 	    vp.addText("<li>Readable from top to bottom.</li>");
 	    vp.addText("<li>Has descriptive names.</li>");
-	    vp.add(addToHorizontalPanel(shortFrame("#bad_sample_1", "420px"), shortFrame("#good_sample_1", "420px")));
+	    vp.add(addToHorizontalPanel(shortFrame("bad_sample_1", "420px"), shortFrame("good_sample_1", "420px")));
 	    vp.addText("<br/>");
 	    vp.addText("<ul>");
 	    vp.addText("</p>");

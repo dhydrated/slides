@@ -23,7 +23,7 @@ public abstract class AbstractPage extends LayoutContainer {
 
 	protected Frame longFrame(String anchor, String height) {
 	
-	    Frame frame = new Frame(getUrl() + anchor);
+	    Frame frame = new Frame(getUrl() + "#" + anchor);
 	    frame.getElement().setPropertyInt("frameBorder", FRAME_BORDER);
 	    frame.getElement().setPropertyString("scrolling", FRAME_SCROLL);
 	    frame.setSize(FRAME_WIDTH, height);
@@ -33,7 +33,7 @@ public abstract class AbstractPage extends LayoutContainer {
 
 	protected Frame shortFrame(String anchor, String height) {
 	
-	    Frame frame = new Frame(getUrl() + anchor);
+	    Frame frame = new Frame(getUrl() + "#" + anchor);
 	    frame.getElement().setPropertyInt("frameBorder", FRAME_BORDER);
 	    frame.getElement().setPropertyString("scrolling", FRAME_SCROLL);
 	    frame.setSize(FRAME_SHORT_WIDTH, height);

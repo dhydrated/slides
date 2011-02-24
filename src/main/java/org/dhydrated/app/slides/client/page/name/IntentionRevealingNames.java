@@ -19,10 +19,10 @@ public class IntentionRevealingNames extends AbstractPage {
 	    vp.addText("<p>");
 	    vp.addText("<ul>");
 	    vp.addText("<li>Use intention revealing name</li>");
-	    vp.add(addToHorizontalPanel(shortFrame("#bad_sample_1", "55px"), shortFrame("#good_sample_1", "55px")));
+	    vp.add(addToHorizontalPanel(shortFrame("bad_sample_1", "55px"), shortFrame("good_sample_1", "55px")));
 	    vp.addText("<br/>");
 	    vp.addText("<li>Bad names make it hard to digest</li>");
-	    vp.add(addToHorizontalPanel(shortFrame("#bad_sample_2", "180px"), shortFrame("#good_sample_2", "180px")));
+	    vp.add(addToHorizontalPanel(shortFrame("bad_sample_2", "180px"), shortFrame("good_sample_2", "180px")));
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
 	    

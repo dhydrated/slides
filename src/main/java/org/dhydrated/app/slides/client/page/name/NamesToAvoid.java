@@ -19,14 +19,14 @@ public class NamesToAvoid extends AbstractPage {
 	    vp.addText("<p>");
 	    vp.addText("<ul>");
 	    vp.addText("<li>Number-series</li>");
-	    vp.add(addToHorizontalPanel(shortFrame("#bad_sample_number_series", "170px"), shortFrame("#good_sample_number_series", "170px")));
+	    vp.add(addToHorizontalPanel(shortFrame("bad_sample_number_series", "170px"), shortFrame("good_sample_number_series", "170px")));
 	    vp.addText("<br/>");
 	    vp.addText("<li>Noise words</li>");
-	    vp.add(longFrame("#bad_sample_noise_words", "55px"));
+	    vp.add(longFrame("bad_sample_noise_words", "55px"));
 	    vp.addText("<br/>");
 	    vp.addText("<li>Unpronounceable names</li>");
 	    vp.addText("<li>Not Search-Friendly Names</li>");
-	    vp.add(longFrame("#bad_sample_pronounceable_words", "70px"));
+	    vp.add(longFrame("bad_sample_pronounceable_words", "70px"));
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
 	    
