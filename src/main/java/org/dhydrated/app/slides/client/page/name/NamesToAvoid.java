@@ -13,8 +13,6 @@ public class NamesToAvoid extends AbstractPage {
 
 	private static String SAMPLE_URL = "code/cleancode/meaningfulnames.html";
 
-	private Button awardButton;
-	
 	@Override
 	protected void onRender(Element parent, int pos) {
 		super.onRender(parent, pos);
@@ -35,22 +33,8 @@ public class NamesToAvoid extends AbstractPage {
 	    vp.add(longFrame("bad_sample_pronounceable_words", "70px"));
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
-	    
 
-	    awardButton = new Button("?",
-				new SelectionListener<ButtonEvent>() {
-
-			public void componentSelected(ButtonEvent ce) {
-				
-				notifyAward("You has received a \"Good Naming\" award", null);
-			}
-		});
-	    
-
-		ButtonBar buttonBar = new ButtonBar();
-		buttonBar.add(awardButton);
-	    
-		vp.add(buttonBar);
+		vp.add(awardButton("You has received a \"Good Naming\" award", null));
 		
 	    add(vp);
 	    

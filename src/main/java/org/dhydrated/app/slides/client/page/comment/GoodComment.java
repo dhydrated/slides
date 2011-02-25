@@ -1,11 +1,11 @@
-package org.dhydrated.app.slides.client.page.function;
+package org.dhydrated.app.slides.client.page.comment;
 
 import org.dhydrated.app.slides.client.page.AbstractPage;
 
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.google.gwt.user.client.Element;
 
-public class ErrorHandling extends AbstractPage {
+public class GoodComment extends AbstractPage {
 
 	private static String SAMPLE_URL = "code/cleancode/functions.html";
 	

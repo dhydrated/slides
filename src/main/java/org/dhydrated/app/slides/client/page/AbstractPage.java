@@ -1,10 +1,13 @@
 package org.dhydrated.app.slides.client.page;
 
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.InfoConfig;
 import com.extjs.gxt.ui.client.widget.Layout;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -53,6 +56,18 @@ public abstract class AbstractPage extends LayoutContainer {
 		hp.addText("&nbsp;");
 		hp.add(widgetB);
 		return hp;
+	}
+	
+	protected Button awardButton(final String message, final String imagePath){
+		
+		return new Button("?",
+				new SelectionListener<ButtonEvent>() {
+
+			public void componentSelected(ButtonEvent ce) {
+				
+				notifyAward(message, imagePath);
+			}
+		});
 	}
 	
 	protected void notifyAward(String message, String imagePath){

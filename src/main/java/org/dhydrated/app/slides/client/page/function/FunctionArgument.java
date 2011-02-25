@@ -28,6 +28,8 @@ public class FunctionArgument extends AbstractPage {
 	    vp.addText("<br/>");
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
+
+		vp.add(awardButton("You has received an \"Awesome Function\" award", null));
 	    
 	    add(vp);
 	    
