@@ -1,0 +1,86 @@
+Meaningful Names
+================
+
+The name of a variable, function, or class should tell you why it exists, what it does, and how it is used. 
+If a name requires a comment, then the name does not reveal its intent.
+
+Number-series naming (a1, a2, .. aN) is the opposite of intentional naming. Such
+names are not disinformative—they are noninformative; they provide no clue to the
+author’s intention.
+
+Noise words are another meaningless distinction. Imagine that you have a Product
+class. If you have another called ProductInfo or ProductData, you have made the names dif-
+ferent without making them mean anything different. Info and Data are indistinct noise
+words like a, an, and the.
+
+If you can’t pronounce it, you can’t discuss it without sounding like an idiot.
+
+Single-letter names and numeric constants have a particular problem in that they are not
+easy to locate across a body of text.
+
+
+Functions
+=========
+
+Small:
+The first rule of functions is that they should be small. The second rule of functions is that
+they should be smaller than that.
+
+Do one thing:
+FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL.
+THEY SHOULD DO IT ONLY.
+
+One level of abstraction:
+make sure that the statements within our function are all at the same level of abstraction.
+There are concepts in there that are at a very high level of
+abstraction, such as getHtml(); others that are at an intermediate level of abstraction, such
+as: String pagePathName = PathParser.render(pagePath); and still others that are remark-
+ably low level, such as: .append("\n"). Mixing levels of abstraction within a function is always confusing. 
+Readers may not
+be able to tell whether a particular expression is an essential concept or a detail.
+
+Reading Code from Top to Bottom: The Stepdown Rule
+We want the code to read like a top-down narrative.
+To say this differently, we want to be able to read the program as though it were a set
+of TO paragraphs, each of which is describing the current level of abstraction and refer-
+encing subsequent TO paragraphs at the next level down.
+
+Side effects are lies. Your function promises to do one thing, but it also does other hidden
+things. Sometimes it will make unexpected changes to the variables of its own class.
+
+Choosing good names for a function can go a long way toward explaining the intent of
+the function and the order and intent of the arguments. In the case of a monad, the
+function and argument should form a very nice verb/noun pair. For example,
+write(name) is very evocative. Whatever this “name” thing is, it is being “written.” An
+even better name might be writeField(name), which tells us that the “name” thing is a
+“field.”
+This last is an example of the keyword form of a function name. Using this form we
+encode the names of the arguments into the function name. For example, assertEquals
+might be better written as assertExpectedEqualsActual(expected, actual). This strongly
+mitigates the problem of having to remember the ordering of the arguments.
+
+
+Function Arguments
+==================
+The ideal number of arguments for a function is zero (niladic). Next comes one (monadic), followed
+closely by two (dyadic). Three arguments (triadic) should be avoided where possible. More than three
+(polyadic) requires very special justification—and then shouldn’t be used anyway.
+
+We could have passed it around as an argument rather than making it an instance variable, but then our readers
+would have had to interpret it each time they saw it. When you are reading the story told by the
+module, includeSetupPage() is easier to understand than includeSetupPageInto(newPageContent).
+
+Arguments are even harder from a testing point of view. Imagine the difficulty of
+writing all the test cases to ensure that all the various combinations of arguments work
+properly. If there are no arguments, this is trivial. If there’s one argument, it’s not too hard.
+With two arguments the problem gets a bit more challenging. With more than two argu-
+ments, testing every combination of appropriate values can be daunting.
+
+
+
+
+
+
+
+
+

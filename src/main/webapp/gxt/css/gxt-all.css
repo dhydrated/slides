@@ -5227,7 +5227,8 @@ body.ext-ie6.x-body-masked .x-window select {
 .x-info-tl .x-info-header {
   color: #555555;
   font-family: tahoma, arial, sans-serif;
-  font-size: 13px;
+  /*font-size: 13px;
+  */font-size: 17px;
   font-size-adjust: none;
   font-stretch: normal;
   font-style: normal;
@@ -5346,7 +5347,9 @@ body.ext-ie6.x-body-masked .x-window select {
   zoom: 1;
   color: #555555;
   font-family: tahoma, arial, sans-serif;
-  font-size: 12px;
+  /*font-size: 15px;
+  */
+  font-size: 15px;
   font-size-adjust: none;
   font-style: normal;
   font-variant: normal;

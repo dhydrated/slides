@@ -2,12 +2,18 @@ package org.dhydrated.app.slides.client.page.name;
 
 import org.dhydrated.app.slides.client.page.AbstractPage;
 
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.google.gwt.user.client.Element;
 
 public class NamesToAvoid extends AbstractPage {
 
 	private static String SAMPLE_URL = "code/cleancode/meaningfulnames.html";
+
+	private Button awardButton;
 	
 	@Override
 	protected void onRender(Element parent, int pos) {
@@ -30,6 +36,22 @@ public class NamesToAvoid extends AbstractPage {
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
 	    
+
+	    awardButton = new Button("?",
+				new SelectionListener<ButtonEvent>() {
+
+			public void componentSelected(ButtonEvent ce) {
+				
+				notifyAward("You has received a \"Good Naming\" award", null);
+			}
+		});
+	    
+
+		ButtonBar buttonBar = new ButtonBar();
+		buttonBar.add(awardButton);
+	    
+		vp.add(buttonBar);
+		
 	    add(vp);
 	    
 	}

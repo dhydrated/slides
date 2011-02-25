@@ -85,7 +85,12 @@ function renderPageWithHtml(Page $page, HtmlBuilder $htmlBuilder){
 <a name="bad_function_argument_1"></a>
 <textarea name="code" class="php:nogutter:nocontrols" >
 //BAD
-function drawRectangle(int $x, int $y){
+function updatePerson($name, 
+					  $email, 
+					  $address1, 
+					  $address2){
+...
+function updatePerson($personArray){
 ...
 </textarea>
 
@@ -94,7 +99,7 @@ function drawRectangle(int $x, int $y){
 <a name="good_function_argument_1"></a>
 <textarea name="code" class="php:nogutter:nocontrols" >
 //GOOD
-function drawRectangle(Size $size){
+function updatePerson(Person $person){
 ...
 </textarea>
 

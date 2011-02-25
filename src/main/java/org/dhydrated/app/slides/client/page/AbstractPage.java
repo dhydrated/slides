@@ -1,6 +1,8 @@
 package org.dhydrated.app.slides.client.page;
 
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.InfoConfig;
 import com.extjs.gxt.ui.client.widget.Layout;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.google.gwt.user.client.ui.Frame;
@@ -51,6 +53,20 @@ public abstract class AbstractPage extends LayoutContainer {
 		hp.addText("&nbsp;");
 		hp.add(widgetB);
 		return hp;
+	}
+	
+	protected void notifyAward(String message, String imagePath){
+		
+		if(imagePath == null){
+			imagePath = "images/icon/award.jpeg";
+		}
+		
+		InfoConfig conf = new InfoConfig("Congratulations!", "<div style=\"float:left\"><img src=\""+imagePath+"\" alt=\"Congratulation!\" title=\"Congratulation!\" /></div>" + "<div>" + message + "</div>");
+	    conf.display = 5 * 1000;
+	    conf.height = 100;
+	    conf.width = 400;
+		
+	    Info.display(conf);
 	}
 
 }

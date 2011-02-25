@@ -2,6 +2,7 @@ package org.dhydrated.app.slides.client.resources;
 
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
+import org.dhydrated.app.slides.client.page.function.ErrorHandling;
 import org.dhydrated.app.slides.client.page.function.Function;
 import org.dhydrated.app.slides.client.page.function.FunctionArgument;
 import org.dhydrated.app.slides.client.page.name.IntentionRevealingNames;
@@ -24,7 +25,8 @@ public class DataProvider {
 	                    new Folder("How Function Should Be",
 			                    new TreeMenuItem[] {
 			                        new TreeMenuItem("Function", "Function", new Function()),
-			                        new TreeMenuItem("Arguments", "Arguments", new FunctionArgument())
+			                        new TreeMenuItem("Arguments", "Arguments", new FunctionArgument()),
+			                        new TreeMenuItem("Error Handling", "Error Handling", new ErrorHandling())
 			                    })
 		                    
 		                }),
