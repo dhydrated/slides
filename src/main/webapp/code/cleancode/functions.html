@@ -19,6 +19,12 @@
 //BAD
 function call() 
 {
+	// If user has not logged in, 
+	// redirect the user to login page.
+    $if($_SESSION['loggedin_id']){
+    	$this->redirect('/login');
+    }
+    
     // Build request
     $call = array(
         'method' => $this->method,

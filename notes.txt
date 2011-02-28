@@ -1,3 +1,17 @@
+Introduction
+============
+
+Smell codes not only effects developers but also the other stakeholder of the softwares.
+Smell codes in other words is bad codes.
+Smell codes > Hard to maintain > accumulates more smell > eventually some part will not
+be testable > accumulate bugs > useless software. So not only developers should be worry
+about smell codes.
+
+This is a very subjective subject. Not everyone has the same understanding of clean code. 
+As the saying goes 'Beauty is in the eye of the beholder'.
+
+
+
 Meaningful Names
 ================
 
@@ -75,6 +89,101 @@ writing all the test cases to ensure that all the various combinations of argume
 properly. If there are no arguments, this is trivial. If there’s one argument, it’s not too hard.
 With two arguments the problem gets a bit more challenging. With more than two argu-
 ments, testing every combination of appropriate values can be daunting.
+
+
+
+Comments
+========
+The proper use of comments is to compensate for our failure to express ourself in
+code. Note that I used the word failure. I meant it. Comments are always failures. We must
+have them because we cannot always figure out how to express ourselves without them,
+but their use is not a cause for celebration.
+So when you find yourself in a position where you need to write a comment, think it
+through and see whether there isn’t some way to turn the tables and express yourself in
+code. Every time you express yourself in code, you should pat yourself on the back. Every
+time you write a comment, you should grimace and feel the failure of your ability of
+expression.
+Why am I so down on comments? Because they lie. Not always, and not intentionally,
+but too often. The older a comment is, and the farther away it is from the code it describes,
+the more likely it is to be just plain wrong. The reason is simple. Programmers can’t realis-
+tically maintain them.
+Code changes and evolves. Chunks of it move from here to there. Those chunks bifur-
+cate and reproduce and come together again to form chimeras. Unfortunately the com-
+ments don’t always follow them—can’t always follow them. And all too often the
+comments get separated from the code they describe and become orphaned blurbs of ever-
+decreasing accuracy.
+
+Inaccurate comments are far worse than no comments at all. They delude and mislead.
+They set expectations that will never be fulfilled. They lay down old rules that need not, or
+should not, be followed any longer.
+Truth can only be found in one place: the code. Only the code can truly tell you what
+it does. It is the only source of truly accurate information. Therefore, though comments are
+sometimes necessary, we will expend significant energy to minimize them.
+
+Fail to express intent
+
+Comments Do Not Make Up for Bad Code
+One of the more common motivations for writing comments is bad code. We write a mod-
+ule and we know it is confusing and disorganized. We know it’s a mess. So we say to our-
+selves, “Ooh, I’d better comment that!” No! You’d better clean it!
+Clear and expressive code with few comments is far superior to cluttered and complex
+code with lots of comments. Rather than spend your time writing the comments that
+explain the mess you’ve made, spend it cleaning that mess.
+
+Explain Yourself in Code
+There are certainly times when code makes a poor vehicle for explanation. Unfortunately,
+many programmers have taken this to mean that code is seldom, if ever, a good means for
+explanation. This is patently false. Which would you rather see? This:
+
+// Check to see if the employee is eligible for full benefits
+if ((employee.flags & HOURLY_FLAG) &&
+(employee.age > 65))
+Or this?
+if (employee.isEligibleForFullBenefits())
+
+It takes only a few seconds of thought to explain most of your intent in code. In many
+cases it’s simply a matter of creating a function that says the same thing as the comment
+you want to write.
+
+Noise Comments
+Sometimes you see comments that are nothing but noise. They restate the obvious and
+provide no new information.
+/**
+* Default constructor.
+*/
+protected AnnualDateRule() {
+}
+No, really? Or how about this:
+/** The day of the month. */
+private int dayOfMonth;
+And then there’s this paragon of redundancy:
+/**
+* Returns the day of the month.
+*
+* @return the day of the month.
+*/
+public int getDayOfMonth() {
+return dayOfMonth;
+}
+
+These comments are so noisy that we learn to ignore them. As we read through code, our
+eyes simply skip over them. Eventually the comments begin to lie as the code around them
+changes.
+
+Commented-Out Code
+Few practices are as odious as commenting-out code. Don’t do this!
+Others who see that commented-out code won’t have the courage to delete it. They’ll think
+it is there for a reason and is too important to delete. So commented-out code gathers like
+dregs at the bottom of a bad bottle of wine.
+Why are those two lines of code commented? Are they important? Were they left as
+reminders for some imminent change? Or are they just cruft that someone commented-out
+years ago and has simply not bothered to clean up.
+There was a time, back in the sixties, when commenting-out code might have been
+useful. But we’ve had good source code control systems for a very long time now. Those
+systems will remember the code for us. We don’t have to comment it out any more. Just
+delete the code. We won’t lose it. Promise.
+
+
 
 
 

@@ -1,0 +1,91 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../css/samplecodes.css" type="text/css" />
+<script src="../../js/shCore.js"></script>
+<script src="../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="bad_sample_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//BAD
+// Check to see if the employee is 
+// eligible for full benefits
+if ((employee.flags & HOURLY_FLAG) &&
+(employee.age > 65))
+...
+</textarea>
+
+<br/>
+
+<a name="good_sample_1"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//GOOD
+if (employee.isEligibleForFullBenefits())
+...
+</textarea>
+
+<br/>
+
+<a name="noise_comment"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//BAD
+/** The day of the month. */
+private $dayOfMonth;
+...
+/**
+ * Constructor
+ */
+public function __construct(){
+...
+
+/**
+* Returns the day of the month.
+* @return the day of the month.
+*/
+public function getDayOfMonth() {
+return dayOfMonth;
+}
+
+</textarea>
+
+<br/>
+
+<a name="commented_out_code"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//BAD
+public function getUsersForClient($clientId, $removeMe = false) {
+	$client = SiteServer::getInterface("ClientInterface")->getClient($clientId);
+       //var_dump(SiteServer::getInterface("ClientInterface")->getClientUsers($client, "on", "", $numResults, 500, 0));
+	$clientUsers = SiteServer::getInterface("ClientInterface")->getClientUsers($client, "on", "", $numResults, 500, 0)->getList();
+	...
+</textarea>
+	
+<br/>
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+</body>
+</html>

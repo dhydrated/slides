@@ -2,7 +2,8 @@ package org.dhydrated.app.slides.client.resources;
 
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
-import org.dhydrated.app.slides.client.page.comment.GoodComment;
+import org.dhydrated.app.slides.client.page.Introduction;
+import org.dhydrated.app.slides.client.page.comment.Comment;
 import org.dhydrated.app.slides.client.page.function.Function;
 import org.dhydrated.app.slides.client.page.function.FunctionArgument;
 import org.dhydrated.app.slides.client.page.name.IntentionRevealingNames;
@@ -15,6 +16,11 @@ public class DataProvider {
 		    Folder[] folders = new Folder[] {
 		        new Folder("Clean Code",
 		            new Folder[] {
+
+		                new Folder("Introduction",
+		                    new TreeMenuItem[] {
+		                        new TreeMenuItem("Introduction", "Introduction", new Introduction())
+		                    }),
 
 		                new Folder("Naming Your Stuff",
 		                    new TreeMenuItem[] {
@@ -30,8 +36,7 @@ public class DataProvider {
 				                  
 	                    new Folder("Comments",
 			                    new TreeMenuItem[] {
-			                        new TreeMenuItem("Good Ones", "Good Ones", new GoodComment()),
-			                        new TreeMenuItem("Bad Ones", "Bad Ones", new GoodComment())
+			                        new TreeMenuItem("Comments", "Comments", new Comment())
 			                    })
 		                    
 		                }),
