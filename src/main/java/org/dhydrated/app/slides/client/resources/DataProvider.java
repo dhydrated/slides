@@ -3,6 +3,8 @@ package org.dhydrated.app.slides.client.resources;
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
 import org.dhydrated.app.slides.client.page.Introduction;
+import org.dhydrated.app.slides.client.page.clazz.Clazz;
+import org.dhydrated.app.slides.client.page.clazz.Clazz2;
 import org.dhydrated.app.slides.client.page.comment.Comment;
 import org.dhydrated.app.slides.client.page.function.Function;
 import org.dhydrated.app.slides.client.page.function.FunctionArgument;
@@ -37,6 +39,12 @@ public class DataProvider {
 	                    new Folder("Comments",
 			                    new TreeMenuItem[] {
 			                        new TreeMenuItem("Comments", "Comments", new Comment())
+			                    }),
+				                  
+	                    new Folder("Class",
+			                    new TreeMenuItem[] {
+			                        new TreeMenuItem("Class", "Class", new Clazz()),
+			                        new TreeMenuItem("Class (2)", "Class (2)", new Clazz2())
 			                    })
 		                    
 		                }),

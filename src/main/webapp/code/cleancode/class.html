@@ -1,0 +1,133 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../css/samplecodes.css" type="text/css" />
+<script src="../../js/shCore.js"></script>
+<script src="../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="large_class"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//BAD
+class SuperDashboard extends IDashboard
+public int getMajorVersionNumber()
+public int getMinorVersionNumber()
+public int getBuildNumber()
+...
+public function getCustomizerLanguagePath()
+public function setSystemConfigPath($systemConfigPath)
+public function getSystemConfigDocument()
+public function setSystemConfigDocument($systemConfigDocument)
+public function getGuruState()
+public function getNoviceState()
+public function getOpenSourceState()
+public function showObject($$object)
+public function showProgress($s)
+...
+public function isMetadataDirty()
+public function setIsMetadataDirty($isMetadataDirty)
+public function getLastFocusedComponent()
+public function setLastFocused($lastFocused)
+public function setMouseSelectState($isMouseSelected)
+public function isMouseSelected()
+public function getLanguageManager()
+public function getProject()
+public function getFirstProject()
+public function getLastProject()
+public function getNewProjectName()
+...
+public function getCurrentDir()
+public function setCurrentDir($newDir)
+public function updateStatus($dotPos, $markPos)
+public function getDataBaseClasses()
+public function getMetadataFeeder()
+public function addProject(Project project)
+public function setCurrentProject(Project project)
+..
+</textarea>
+
+<br/>
+
+<a name="small_class"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//GOOD
+class SuperDashboard extends IDashboard
+    public function getComponents()
+	public function getMajorVersionNumber()
+	public function getMinorVersionNumber()
+	public function getBuildNumber()
+}
+	
+</textarea>
+<br/>
+
+<a name="srp"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//GOOD
+public class Version {
+	public int getMajorVersionNumber()
+	public int getMinorVersionNumber()
+	public int getBuildNumber()
+}
+</textarea>
+<br/>
+
+<a name="cohesion"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+//GOOD
+class ExternalModuleLogDbStrategy implements ExternalModuleLogStrategy{
+	
+	const LogTable = "external_module_log";
+	
+	private $db = null;
+	
+	function __construct(){
+		$this->db =& DatabaseManager::getClientDB( SiteServer::getDbPool() );
+	}
+
+	public function logRequest($correlationId, $username, $url, $moduleId){
+		
+		$sql = "INSERT INTO " . self::LogTable . "
+		...					
+		return $result = $this->db->query($sql);
+	}
+	
+	public function logResponse($correlationId, $content){
+		
+		$sql = "UPDATE " . self::LogTable . "
+		...
+		return $result = $this->db->query($sql);
+	}
+	
+}
+</textarea>
+<br/>
+
+
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+</body>
+</html>
