@@ -20,7 +20,7 @@ public class Clazz extends AbstractPage {
 	    vp.addText("<ul>");
 	    vp.addText("<li>Encapsulation.</li>");
 	    vp.addText("<li>Keep it small.</li>");
-	    vp.add(addToHorizontalPanel(shortFrame("large_class", "600px"), shortFrame("small_class", "100px")));
+	    vp.add(addToHorizontalPanel(shortFrame("large_class", "550px"), shortFrame("small_class", "100px")));
 	    vp.addText("<br/>");
 	    vp.addText("<ul>");
 	    vp.addText("</p>");

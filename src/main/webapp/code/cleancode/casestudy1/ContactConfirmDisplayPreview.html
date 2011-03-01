@@ -1,0 +1,684 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../../css/samplecodes.css" type="text/css" />
+<script src="../../../js/shCore.js"></script>
+<script src="../../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="large_class"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+
+<?php
+require_once("library/GeneratePassword.php");
+require_once 'client/model/MasheryMember.php';
+
+/**
+ * Confirmation screen to display pre sync'ing process
+ * @author taufekj
+ */
+class screen_ContactConfirmDisplayPreview extends screen_ContactConfirm{
+	
+	const USERTYPE_STANDARD = "standard";
+	const USERTYPE_STAFF = "staff";
+	const USERTYPE_API = "api";
+	
+	const STATUS_CURRENTUSER = "Current User";
+	const STATUS_FORMER = "Former";
+	const STATUS_API = "API";
+	
+	
+	/**
+	 * @var SalesforceContactHandler
+	 */
+	private $sfci;
+	
+		/**
+	 * @var ClientInterface
+	 */
+	private $ci;
+
+	/**
+	 * @var Contact
+	 */
+	private $contact;
+	
+	/**
+	 * @var string
+	 */
+	private $clientId;
+	
+	/**
+	 * @var HWASClient
+	 */
+	private $client;
+	
+	/**
+	 * @var string
+	 */
+	private $userId;
+	
+	/**
+	 * @var HWASUser
+	 */
+	private $user;
+	
+	/**
+	 * @var MasheryMember
+	 */
+	private $masheryMember;
+	
+	/**
+	 * @var string
+	 */
+	private $masheryUsername;
+	
+	/**
+	 * @var XSLTemplate
+	 */
+	private $template;
+	
+	/**
+	 * @var array
+	 */
+	private $toLog = array();
+	
+	/**
+	 * @var array
+	 */
+	private $toWrite = array();
+	
+	/**
+	 * @var array
+	 */
+	private $errors = array();
+	
+	/**
+	 * @var string
+	 */
+	private $generatedPassword;
+	
+	/**
+	 * @var array
+	 */
+	private $toWriteMasheryMember = array();
+
+	public function execute(){
+		
+		$this->addToTemplate("selectedAccountName", $this->getAccount()->getName());
+		$this->addToTemplate("selectedAccountId", $this->getAccountId());
+		$this->addToTemplate("selectedMarket", $this->getMarketCode());
+		
+		if($this->isDbConnected()){
+			
+			$email = $this->getContact()->getEmail();
+
+			if($this->isAgencyUser()){
+				
+				$this->processAgencyUser();
+			}
+
+			$this->processNewUser();
+			
+			if($this->isSyncName()){
+				
+				$this->processSyncName();
+			}
+			
+			if($this->isSyncEmail()){
+				
+				$this->processSyncEmail();
+			}
+			
+			if ($this->isHitwiseStaff())
+			{
+				$this->processHitwiseStaff();
+			}
+
+			if($this->isSyncStatus()){
+				
+				$this->processSyncStatus();
+			}
+			
+			$this->processContactName();
+			
+			$this->processApiUser();
+			
+			$this->processUserType();
+			
+			$this->addToTemplate("toWrite", $this->toWrite);
+			$this->addToTemplate("toWriteMasheryMember", $this->toWriteMasheryMember);
+			$this->addToTemplate("errors", $this->errors);
+			$this->addToTemplate("screen", "contactConfirm");
+			
+			$_SESSION[parent::SESSION_TOLOG] = $this->toLog;
+			$_SESSION[parent::SESSION_USERWRITE] = $this->getUser();
+			$_SESSION[parent::SESSION_MEMBERWRITE] = $this->getMasheryMember();
+			
+		} 
+		else {
+			
+			//set the template variable here in the case that we have an error
+			$this->addToTemplate("dbaccess", "connection_failed");
+			$this->addToTemplate("error", 'Could not connect to AMS-'.$this->getMarketCode());
+		}
+		
+		echo $this->getTemplate()->parse("templates/confirm.xsl");
+	}
+	
+	private function isSyncName(){
+		
+		return (isset($_REQUEST['sync_name']) && $_REQUEST['sync_name'] == 1);
+	}
+	
+	private function isSyncEmail(){
+		
+		return (isset($_REQUEST['sync_email']) && $_REQUEST['sync_email'] == 1);
+	}
+	
+	private function isSyncStatus(){
+		
+		return (isset($_REQUEST['sync_status']) && $_REQUEST['sync_status'] == 1);
+	}
+	
+	private function getTemplate(){
+		
+		if(empty($this->template)){
+					
+			$this->template = new XSLTemplate();
+		}
+		
+		return $this->template;
+	}
+	
+	private function addToTemplate($key, $value){
+		
+		$this->getTemplate()->addVar($key, $value);
+	}
+	
+	private function isDbConnected() {
+		
+		$errorStatus = new resultErrorHandler($this->getDbPool());
+		
+		return ($errorStatus->testGetClient() != "connection_failed");
+	}
+
+	private function getUserId(){
+		
+		// This check for new user used to be done by
+		// checking from the mapping - there was no real reason for this afaict
+		if( isset($_REQUEST['user_id']) )
+		{
+			$this->userId = $_REQUEST['user_id'];
+		}
+		else {
+			$this->userId = -1;
+		}
+		
+		return $this->userId;
+	}
+
+	private function getUser() {
+		
+		if(empty($this->user)){
+			
+			if($this->isNewUser()){
+				$this->user = new HWASUser();
+			}else{
+				$this->user = $this->getUserInterface()->getUser($this->getUserId(), false);
+			}
+		}
+		
+		return $this->user;
+	}
+	
+	private function getMasheryUsername() {
+		
+		if(empty($this->masheryUsername)){
+				$this->masheryUsername = $this->getMappingInterface()->getMasheryUsernameFromAmsId($this->getUserId(), $this->getMarketCode());
+		}
+		
+		return $this->masheryUsername;
+	}
+	
+	private function isNewMasheryMember() {
+		
+		$isNewMember;
+		
+		if($this->getMasheryUsername() == -1){
+			$isNewMember = true;
+		}else{
+			$isNewMember = false;
+		}
+		
+		return $isNewMember;
+	}
+	
+	private function getMasheryMember() {
+		
+		if(empty($this->masheryMember)){
+			
+			if($this->isNewMasheryMember()){
+				
+				$this->masheryMember = new MasheryMember();
+			}else{
+				
+				$this->masheryMember = $this->getMasheryHandler()->getMemberByUsername($this->getMasheryUsername());
+			}
+		}
+		
+		return $this->masheryMember;
+	}
+	
+	private function isNewUser() {
+		
+		$isNewUser;
+		
+		if($this->getUserId() == -1){
+			$isNewUser = true;
+		}else{
+			$isNewUser = false;
+		}
+		
+		return $isNewUser;
+	}
+
+	
+	private function isApiUser() {
+		
+		$isApiUser;
+		
+		if(stripos( $this->getContact()->getStatus(), self::STATUS_API ) !== false){
+			
+			$isApiUser = true;
+		}else{
+			
+			$isApiUser = false;
+		}
+		
+		return $isApiUser;
+	}
+	
+	private function processAgencyUser() {
+		
+		// If Agency user, generate fake email if needed...
+		$i = 1;
+		while( get_class($this->getUserInterface()->getUserByEmail($this->getContact()->getEmail())) == "HWASUser" )
+		{
+			$this->getContact()->setEmail("agency-user$i-".preg_replace('/^agency-user\d+-/','', $this->getContact()->getEmail(), 1));
+			$i++;
+		}
+		
+		$this->addToTemplate("agencyUser", $_REQUEST['agency_user']);
+	}
+	
+	private function getGeneratedPassword(){
+		
+		if(empty($this->generatedPassword)){
+			
+			$this->generatedPassword = $this->generatePassword();
+		}
+		
+		return $this->generatedPassword;
+	}
+	
+	private function processNewUser() {
+
+
+		if($this->isNewUser()){
+			$this->getUser()->setTypeId($this->getUserInterface()->getUserTypeIdByCode(self::USERTYPE_STANDARD));	
+			$test = $this->getUserInterface()->getUserByEmail($this->getContact()->getEmail());
+
+			if(get_class($test) == "HWASUser"){
+
+				$this->errors[] = "This contact's email address already exists in the database for this market, please check the AMS.";
+			}
+			else{
+
+				$username = $this->generateAmsUsername();
+					
+				$this->getUser()->setUsername($username);
+				$this->getUser()->setPassword(md5($this->getGeneratedPassword()));
+					
+				$this->toWrite[] = Array("Username",$username);
+				$this->toWrite[] = Array("Password",$this->getGeneratedPassword());
+					
+				$this->toLog[] = "(User Name : Added -> $username)(Password : New password set and encrypted)";
+
+				$this->getUser()->setClient($this->getClient());
+				$this->getUser()->setClientId($this->getClientId());
+			}
+			$this->addToTemplate("newuser", "true");
+		}
+		else{
+
+			$this->addToTemplate("newuser", "false");
+		}
+	}
+	
+	private function processApiUser(){
+		
+		if($this->isApiUser()){
+			
+			$this->checkMasheryService();
+			
+			$this->addToTemplate("api_user", "true");
+			
+			if( $this->isNewMasheryMember()){
+				
+				$this->getUser()->setTypeId($this->getUserInterface()->getUserTypeIdByCode(self::USERTYPE_API));
+					
+				$this->getMasheryMember()->setFirstName($this->getUser()->getFirstName());
+				$this->getMasheryMember()->setLastName($this->getUser()->getLastName());
+				$this->getMasheryMember()->setDisplayName($this->getUser()->getFirstName() . " " . $this->getUser()->getLastName());
+				$this->getMasheryMember()->setEmail($this->getUser()->getEmail());
+				$this->getMasheryMember()->setUsername($this->generateMasheryUsername());
+				$this->getMasheryMember()->setPasswdNew($this->getGeneratedPassword());
+				$this->getMasheryMember()->setAreaStatus('active');
+				
+				$this->getUser()->setHA1(md5($this->getUser()->getUserName() . ':' . 'hwapi' . ':' . $this->getGeneratedPassword()));
+				
+				$this->toWriteMasheryMember[] = Array("Username", $this->getMasheryMember()->getUsername());
+				$this->toWriteMasheryMember[] = Array("Password", $this->getGeneratedPassword());
+				$this->toWriteMasheryMember[] = Array("FirstName", $this->getMasheryMember()->getFirstName());
+				$this->toWriteMasheryMember[] = Array("LastName", $this->getMasheryMember()->getLastName());
+				$this->toWriteMasheryMember[] = Array("Display Name", $this->getMasheryMember()->getDisplayName());
+				$this->toWriteMasheryMember[] = Array("Email", $this->getMasheryMember()->getEmail());
+				
+				$this->addToTemplate("new_masherymember", "true");
+			}
+			else{
+				
+				$this->addToTemplate("new_masherymember", "true");
+			}
+		}
+		else{
+			
+			$this->addToTemplate("api_user", "false");
+		}
+	}
+	
+	private function checkMasheryService() {
+		
+		if(!$this->isMasheryConnected()){
+			
+			$this->errors[] = "Unable to connect to Mashery service";
+		}
+	}
+	
+	
+	private function generateMasheryUsername(){
+		
+		$generatedUsername = '';
+		
+		if($this->isMasheryConnected()){
+			try {
+
+				$generatedUsername = $this->getMasheryHandler()->generateUsername($this->getUser()->getUserName());
+			} catch (Exception $e) {
+				
+				$this->errors[] = $e->getMessage();
+			}
+		}
+		
+		return $generatedUsername;
+	}
+	
+	private function generateAmsUsername(){
+
+		//Generate a username
+		$username = '';
+		$noUsername = true;
+		$suffixInt = 0;
+		while($noUsername){
+
+			if($suffixInt > 0){
+				$suffix = (string)$suffixInt;
+			} else {
+				$suffix = "";
+			}
+
+			$username = strtolower($this->getContact()->getFirstName()) . substr(strtolower($this->getContact()->getLastName()),0,1) . $suffix;
+			$test = $this->getUserInterface()->getAuthUserByUsername($username);
+
+			if(get_class($test) == "HWASUser"){
+
+				$username = substr(strtolower($this->getContact()->getFirstName()),0,1) . strtolower($this->getContact()->getLastName()) . $suffix;
+				$test = $this->getUserInterface()->getAuthUserByUsername($username);
+
+				if(get_class($test) == "HWASUser"){
+					$suffixInt++;
+				}else{
+					$noUsername = false;
+				}
+			}else{
+				$noUsername = false;
+			}
+		}
+		
+		return $username;
+	}
+	
+	private function generatePassword(){
+
+		//Generate a password
+		$pw = new GeneratePassword();
+		return $pw->Generate(10);
+	}
+	
+	private function processSyncName(){
+
+		if($this->isNewUser()){
+			
+			$this->toLog[] = "(First Name : Added -> " . $this->getContact()->getFirstName() . ")(Last Name : Added -> " . $this->getContact()->getLastName() . ")";
+		}else{
+			
+			$this->toLog[] = "(First Name : " . $this->getUser()->getFirstName() . " -> " . $this->getContact()->getFirstName() . ")(Last Name : " . $this->getUser()->getLastName() . " -> " . $this->getContact()->getLastName() . ")";
+		}
+
+		$this->getUser()->setFirstName($this->getContact()->getFirstName());
+		$this->getUser()->setLastName($this->getContact()->getLastName());
+
+		$this->toWrite[] = Array("First Name",$this->getContact()->getFirstName());
+		$this->toWrite[] = Array("Last Name",$this->getContact()->getLastName());
+	}
+	
+	private function processSyncEmail(){
+
+		if($this->isNewUser()){
+			$this->toLog[] = "(Email : Added -> " . $this->getContact()->getEmail() . ")";
+		}else{
+			$this->toLog[] = "(Email : " . $this->getUser()->getEmail() . " -> " . $this->getContact()->getEmail() . ")";
+		}
+
+		$this->getUser()->setEmail($this->getContact()->getEmail());
+
+		$this->toWrite[] = Array("Email Address", $this->getContact()->getEmail());
+	}
+	
+	private function processSyncStatus(){
+
+		if( ($this->getContact()->getStatus() == self::STATUS_CURRENTUSER
+                && strpos( $this->getContact()->getRole(), self::STATUS_FORMER ) === false ) ||
+            stripos( $this->getContact()->getStatus(), self::STATUS_API ) !== false){
+				
+			$this->getUser()->setAccessEnabled(true);
+			
+			$this->toWrite[] = Array("Access Enabled","Yes");
+				
+			if(!$this->isNewUser()){
+
+				$this->toLog[] = "(Access Enabled :  -> 1)";
+			}
+			elseif($this->isNewUser()){
+
+				$this->toLog[] = "(Access Enabled : Added -> 1)";
+			}
+		}
+		else{
+				
+			if(!$this->isNewUser()){
+				$this->toLog[] = "(Access Enabled : 1 -> )";
+			}elseif($this->isNewUser()){
+				$this->toLog[] = "(Access Enabled : Added -> )";
+			}
+			$this->getUser()->setAccessEnabled(false);
+			$this->toWrite[] = Array("Access Enabled","No");
+		}
+	}
+	
+	private function processUserType() {
+	
+		if ($this->isNewUser())
+		{
+			$this->getUserInterface()->resetUserType($this->getUser());
+			$this->toLog[] = "(Account Type : Added -> " . $this->getUser()->getTypeName() . ")";
+			$this->toWrite[] = Array("Account Type", $this->getUser()->getTypeName());
+		} 
+	}
+	
+	private function processContactName(){
+		
+		if(isset($_REQUEST['contactName'])){
+
+			$this->addToTemplate("contactName", $_REQUEST['contactName']);
+		}
+	}
+	
+	private function processHitwiseStaff(){
+		
+		$this->getUser()->setTypeId($this->getUserInterface()->getUserTypeIdByCode(self::USERTYPE_STAFF));
+		
+		$this->addToTemplate("staff_account_warning", true);
+	}
+	
+	private function getClientInterface() {
+		
+		if(empty($this->ci)){
+			
+			$this->ci = AppServer::getInterface("ClientInterface",$this->getDbPool());
+		}
+		
+		return $this->ci;
+	}
+	
+	private function getSalesforceContactHandler() {
+		
+		if(empty($this->sfci)){
+			
+			$this->sfci = new SalesforceContactHandler();
+		}
+		
+		return $this->sfci;
+	}
+	
+	/**
+	 * Get Contact
+	 */
+	private function getContact(){
+		
+		if(empty($this->contact)){
+			
+			$this->contact = $this->getSalesforceContactHandler()->getContactById($this->getContactId(), $this->getMarketCode());
+		}
+		
+		return $this->contact;
+	}
+	
+	/**
+	 * Get Client Id
+	 */
+	private function getClientId(){
+		
+		if(empty($this->clientId)){
+
+			$this->clientId = $this->getMappingInterface()->getClientId($this->getAccountId(), $this->getMarketCode());
+		}
+		
+		return $this->clientId;
+	}
+	
+	/**
+	 * Get client.
+	 */
+	private function getClient(){
+		
+		if(empty($this->client)){
+			
+			$this->client = $this->getClientInterface()->getClient($this->getClientId());
+		}
+		
+		return $this->client;
+	}
+	
+	private function printDebug(){
+		
+		print '<br/>';
+		print 'isNewMasheryMember:';
+		print '<br/>';
+		var_dump($this->isNewMasheryMember());
+		print '<br/>';
+		
+		print '<br/>';
+		print 'isApiUser:';
+		print '<br/>';
+		var_dump($this->isApiUser());
+		print '<br/>';
+		
+		print '<br/>';
+		print 'toWrite:';
+		print '<br/>';
+		var_dump($this->toWrite);
+		print '<br/>';
+		
+		print '<br/>';
+		print 'toWriteMasheryMember:';
+		print '<br/>';
+		var_dump($this->toWriteMasheryMember);
+		print '<br/>';
+		
+		print '<br/>';
+		print 'toLog:';
+		print '<br/>';
+		var_dump($this->toLog);
+		print '<br/>';
+			
+		print '<br/>';
+		print 'account:';
+		print '<br/>';
+		var_dump($this->getAccount());
+		print '<br/>';
+			
+		print '<br/>';
+		print 'contact:';
+		print '<br/>';
+		var_dump($this->getContact());
+		print '<br/>';
+			
+		print '<br/>';
+		print 'user:';
+		print '<br/>';
+		var_dump($this->getUser());
+		print '<br/>';
+			
+		print '<br/>';
+		print 'masheryMember:';
+		print '<br/>';
+		var_dump($this->getMasheryMember());
+		print '<br/>';
+	}
+}
+	
+</textarea>
+<br/>
+
+</body>
+</html>

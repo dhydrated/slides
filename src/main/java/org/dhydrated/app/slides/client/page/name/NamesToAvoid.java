@@ -34,7 +34,7 @@ public class NamesToAvoid extends AbstractPage {
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
 
-		vp.add(awardButton("You has received a \"Good Naming\" award", null));
+		vp.add(awardButton("You has received a \"Cool Names\" award", null));
 		
 	    add(vp);
 	    

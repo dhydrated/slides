@@ -2,7 +2,9 @@ package org.dhydrated.app.slides.client.resources;
 
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
+import org.dhydrated.app.slides.client.page.End;
 import org.dhydrated.app.slides.client.page.Introduction;
+import org.dhydrated.app.slides.client.page.casestudy.CaseStudy;
 import org.dhydrated.app.slides.client.page.clazz.Clazz;
 import org.dhydrated.app.slides.client.page.clazz.Clazz2;
 import org.dhydrated.app.slides.client.page.comment.Comment;
@@ -19,14 +21,14 @@ public class DataProvider {
 		        new Folder("Clean Code",
 		            new Folder[] {
 
-		                new Folder("Introduction",
+		                new Folder("",
 		                    new TreeMenuItem[] {
 		                        new TreeMenuItem("Introduction", "Introduction", new Introduction())
 		                    }),
 
 		                new Folder("Naming Your Stuff",
 		                    new TreeMenuItem[] {
-		                        new TreeMenuItem("Intention Revealing Names", "Intention Revealing Names", new IntentionRevealingNames()),
+		                        new TreeMenuItem("Good names", "Good names", new IntentionRevealingNames()),
 		                        new TreeMenuItem("Names To Avoid", "Names To Avoid", new NamesToAvoid())
 		                    }),
 		                  
@@ -45,6 +47,16 @@ public class DataProvider {
 			                    new TreeMenuItem[] {
 			                        new TreeMenuItem("Class", "Class", new Clazz()),
 			                        new TreeMenuItem("Class (2)", "Class (2)", new Clazz2())
+			                    }),
+				                  
+	                    new Folder("Case Study",
+			                    new TreeMenuItem[] {
+			                        new TreeMenuItem("CaseStudy", "CaseStudy", new CaseStudy())
+			                    }),
+				                  
+	                    new Folder("",
+			                    new TreeMenuItem[] {
+			                        new TreeMenuItem("End", "End", new End())
 			                    })
 		                    
 		                }),

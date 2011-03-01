@@ -1,0 +1,295 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../../css/samplecodes.css" type="text/css" />
+<script src="../../../js/shCore.js"></script>
+<script src="../../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="large_class"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+class screen_ContactConfirm{
+	public static function process(){
+		$dbPool = sfamsConfig::getDbPool($_REQUEST['market']);
+		$ui = AppServer::getInterface("UserInterface",$dbPool);
+		$usi = AppServer::getInterface("UserSettingInterface",$dbPool);
+		$sfci = new SalesforceContactHandler();
+		$mi = new MappingInterface();
+		$toLog = Array();
+
+		$toWrite = Array();
+		$toSet = Array();
+		$errors = Array();
+
+      $contactId = 0;
+
+		$accountData = $_SESSION['accountData'];
+		$accountId = $accountData->getId();
+
+      if(isset($_REQUEST['contact_id'])){
+		   $contactId = $_REQUEST['contact_id'];
+		   if($contactId != "")
+			   $_SESSION['contact_id'] = $contactId;
+      }else{
+      	$contactId = $_SESSION['contact_id'];
+		}
+
+
+		$ci = AppServer::getInterface("ClientInterface",$dbPool);
+		$clientId = $mi->getClientId($accountId,$_REQUEST['market']);
+		$client = $ci->getClient($clientId);
+
+		
+		
+		if(isset($_REQUEST['confirm']) && $_REQUEST['confirm'] == "Yes"){
+			$user = $_SESSION['userWrite'];
+			if($_REQUEST['newuser'] == 'true'){
+				if($_REQUEST['sfams_password'] != ''){
+					$password = $_REQUEST['sfams_password'];
+					$user->setPassword(md5($password));
+					$_SESSION['new_password'][$user->getUserName()] = $password;
+				}
+			}
+			$oldsfid = $user->getSalesforceId();
+			if($contactId != $oldsfid){
+				$user->setSalesforceId($contactId);
+				if($oldsfid == ""){
+					$_SESSION['toLog'][] = "(Salesforce ID : Added -> $contactId)";
+				}else{
+					$_SESSION['toLog'][] = "(Salesforce ID : $oldsfid -> $contactId)";
+				}
+			}
+			// Experian Hitwise - Staff account id.
+			if ($accountId == '00120000000LxdpAAC')
+			{
+				if ($_REQUEST['newuser'] == 'true')
+				{
+					$_SESSION['toLog'][] = "(Account Type : Added -> Staff(3))";
+					//Staff account type is 3...
+					$user->setTypeId(3);
+				} else if ($user->getTypeId() != 3) {
+					$_SESSION['toLog'][] = "(Account Type : ".$user->getTypeId()." -> Staff(3))";
+					$user->setTypeId(3);
+				}
+			}
+			
+			$ui->commitUser($user);
+			$userId = $user->getId();
+			if($userId != ""){
+				$logs = implode("",$_SESSION['toLog']);
+				$reason = stripslashes($_REQUEST['reason']);
+				$ui->saveHistory( $_SESSION['AMS_USER_NAME'], $_SERVER['REMOTE_ADDR'], $userId, $logs, "SFAMS: " . $reason );
+
+				// Check if mapping exists, create it if not:
+				if($_REQUEST['newuser'] == 'true')
+				{
+					if( isset($_REQUEST['agency_user']) && $_REQUEST['agency_user'] == 'Yes')
+						{ $mappingTable = "agency"; }
+					else
+						{ $mappingTable = "contact"; }
+					$mi->updateUserMapping($_SESSION['contact_id'],$userId,$_REQUEST['market'], $mappingTable);
+				}
+	      }
+
+			header('location: index.php?screen=contact&accChck='.$accountId.'&&market=' . $_REQUEST['market']);
+
+		}
+
+		$template = new XSLTemplate();
+
+		if( isset($_REQUEST['agency_user']) && $_REQUEST['agency_user'] == 'Yes')
+			{ $template->addVar("agencyUser", $_REQUEST['agency_user']); }
+
+		$template->addVar("selectedAccountName", $_SESSION['accountData']->getName());
+		$template->addVar("selectedAccountId", $accountId);
+		$template->addVar("selectedMarket",$_REQUEST['market']);
+
+					//db error handling code
+				$errorStatus = new resultErrorHandler($dbPool);
+				if($errorStatus->testGetClient($clientId) == "connection_failed"){
+						//set the template variable here in the case that we have an error
+						$clientId = "connection_failed";
+						$template->addVar("dbaccess","connection_failed");
+						$errorMsg = 'Could not connect to AMS-'.$_REQUEST['market'];
+						$template->addVar("error",$errorMsg);
+						} else {
+						
+		$contacts     = $sfci->getAllContactsForAccount( $accountData->getId(), $_REQUEST['market'] );
+		$contactRoles = $sfci->getAllContactRolesForAccount( $accountData->getId(), $_REQUEST['market'] );
+
+		// Merge:
+		$contacts = array_merge($contacts,$contactRoles);
+
+		foreach($contacts as $contact){
+			if($contact->getId() == $contactId) break;
+		}
+
+		// This check for new user used to be done by
+		// checking from the mapping - there was no real reason for this afaict
+		if( isset($_REQUEST['user_id']) )
+			{ $amsId = $_REQUEST['user_id']; }
+		else
+			{ $amsId = -1; }
+
+		if($amsId == -1){
+			$newUser = true;
+			$user = new HWASUser();
+		}else{
+			$newUser = false;
+			$user = $ui->getUser($amsId,false);
+		}
+
+		$firstName = $contact->getFirstName();
+		$lastName = $contact->getLastName();
+		$email = $contact->getEmail();
+
+		// If Agency user, generate fake email if needed...
+		if( isset($_REQUEST['agency_user']) && $_REQUEST['agency_user'] == 'Yes')
+		{
+			$i = 1;
+			while( get_class($ui->getUserByEmail($email)) == "HWASUser" )
+			{
+				$contact->setEmail("agency-user$i-".preg_replace('/^agency-user\d+-/','', $email, 1));
+				$email = $contact->getEmail();
+				$i++;
+			}
+		}
+
+		if($newUser){
+			$test = $ui->getUserByEmail($email);
+			if(get_class($test) == "HWASUser"){
+				$errors[] = "This contact's email address already exists in the database for this market, please check the AMS.";
+			}else{
+				//Generate a username
+				$noUsername = true;
+				$suffixInt = 0;
+				while($noUsername){
+					if($suffixInt > 0) $suffix = (string)$suffixInt; else $suffix = "";
+					$username = strtolower($firstName) . substr(strtolower($lastName),0,1) . $suffix;
+					$test = $ui->getAuthUserByUsername($username);
+					if(get_class($test) == "HWASUser"){
+						$username = substr(strtolower($firstName),0,1) . strtolower($lastName) . $suffix;
+						$test = $ui->getAuthUserByUsername($username);
+						if(get_class($test) == "HWASUser"){
+							$suffixInt++;
+						}else{
+							$noUsername = false;
+						}
+					}else{
+						$noUsername = false;
+					}
+					//$noUsername = false;
+				}
+				$user->setUsername($username);
+				$toWrite[] = Array("Username",$username);
+
+				//Generate a password
+				$pw = new GeneratePassword();
+				$password = $pw->Generate(7);
+				$user->setPassword(md5($password));
+				$toWrite[] = Array("Password",$password);
+				$toLog[] = "(User Name : Added -> $username)(Password : New password set and encrypted)";
+
+				$user->setClient($client);
+				$user->setClientId($client->getId());
+				$user->setTypeId(1);
+			}
+		}
+
+		if(isset($_REQUEST['sync_name']) && $_REQUEST['sync_name'] == 1){
+			if($newUser){
+				$toLog[] = "(First Name : Added -> $firstName)(Last Name : Added -> $lastName)";
+			}else{
+				$oldfn = $user->getFirstName();
+				$oldln = $user->getLastName();
+				$toLog[] = "(First Name : $oldfn -> $firstName)(Last Name : $oldln -> $lastName)";
+			}
+
+			$user->setFirstName($firstName);
+			$user->setLastName($lastName);
+
+			$toWrite[] = Array("First Name",$firstName);
+			$toWrite[] = Array("Last Name",$lastName);
+		}
+		if(isset($_REQUEST['sync_email']) && $_REQUEST['sync_email'] == 1){
+			if($newUser){
+				$toLog[] = "(Email : Added -> $email)";
+			}else{
+				$oldemail = $user->getEmail();
+				$toLog[] = "(Email : $oldemail -> $email)";
+			}
+
+			$user->setEmail($email);
+
+			$toWrite[] = Array("Email Address",$email);
+
+		}
+		
+		// Hardcoded 'Experian Hitwise - Staff' SF account ID.
+		// All staff should be under this account, if its not, they should move
+		// instead of adding more IDs here.
+		if ($accountId == '00120000000LxdpAAC')
+		{
+			if ($newUser)
+			{
+				$toLog[] = "(Account Type : Added -> Staff(3))";
+				$toWrite[] = Array("Account Type","Staff(3)");
+				$template->addVar("staff_account_warning", "true");
+				//Staff account type is 3...
+			} else if ($user->getTypeId() != 3) {
+				$toLog[] = "(Account Type : ".$user->getTypeId()." -> Staff(3))";
+				$toWrite[] = Array("Account Type","Staff(3)");
+				$template->addVar("staff_account_warning", "true");
+			}
+		}
+
+		if(isset($_REQUEST['sync_status']) && $_REQUEST['sync_status'] == 1){
+			if( $contact->getStatus() == 'Current User' && strpos( $contact->getRole(), "Former" ) === false ){
+				$user->setAccessEnabled(true);
+				$toWrite[] = Array("Access Enabled","Yes");
+				if(!$newUser){
+					$toLog[] = "(Access Enabled :  -> 1)";
+				}elseif($newUser){
+					$toLog[] = "(Access Enabled : Added -> 1)";
+				}
+			}else{
+				if(!$newUser){
+					$toLog[] = "(Access Enabled : 1 -> )";
+				}elseif($newUser){
+					$toLog[] = "(Access Enabled : Added -> )";
+				}
+				$user->setAccessEnabled(false);
+				$toWrite[] = Array("Access Enabled","No");
+			}
+		}
+		$template->addArray("toWrite",$toWrite);
+		$template->addArray("errors",$errors);
+		$template->addVar("screen","contactConfirm");
+		if($newUser)
+			$template->addVar("newuser","true");
+		else
+			$template->addVar("newuser","false");
+
+      if(isset($_REQUEST['contactName'])){
+		   $template->addVar("contactName", $_REQUEST['contactName']);
+      }
+		$_SESSION['toLog'] = $toLog;
+		$_SESSION['userWrite'] = $user;
+			}
+		echo $template->parse("templates/confirm.xsl");
+	}
+
+}
+</textarea>
+<br/>
+
+</body>
+</html>

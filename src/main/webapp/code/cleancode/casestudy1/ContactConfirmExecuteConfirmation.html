@@ -1,0 +1,270 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../../css/samplecodes.css" type="text/css" />
+<script src="../../../js/shCore.js"></script>
+<script src="../../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="large_class"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+
+class screen_ContactConfirmExecuteConfirmation extends screen_ContactConfirm{
+	
+	
+	/**
+	 * @var HWASUser
+	 */
+	private $user;
+	
+	/**
+	 * @var MasheryMember
+	 */
+	private $masheryMember;
+	
+	/**
+	 * @var HWASManager
+	 */
+	private $loginManager;
+	
+	/**
+	 * @var ManagerInterface
+	 */
+	private $managerInterface;
+	
+	private $error = array();
+
+	public function execute(){
+
+        $screen = 'contact';
+		
+		try {
+
+			if($this->isNewUser()){
+					
+				if($this->isUpdatePassword()){
+
+					$this->updatePassword();
+				}
+			}
+
+			if($this->isOldSalesforceId()){
+					
+				$this->processOldSalesforceId();
+			}
+
+			$this->updateUser();
+
+			if($this->getUser()->getId() != ""){
+					
+				$this->updateUserHistory();
+					
+				// Check if mapping exists, create it if not:
+				if($this->isNewUser())
+				{
+					$this->updateUserMapping();
+				}
+			}
+			
+			if($this->isApiUser()){
+				
+				$screen = 'api';
+				$this->checkMasheryService();
+				$this->updateMashery();
+				$this->updateMasheryMapping();
+				
+				if($this->isSendApiEmail()){
+					
+					$this->sendApiEmail();
+				}
+			}
+			
+		} catch (Exception $e) {
+			
+			$this->error[] = $e->getMessage();
+			
+		}
+		
+		header('location: index.php?screen=' . $screen . '&accChck='.$this->getAccountId().'&&market=' . $this->getMarketCode());
+	}
+	
+	private function getUser(){
+		
+		if(empty($this->user)){
+			
+			$this->user = $_SESSION[parent::SESSION_USERWRITE];
+		}
+		return $this->user;
+	}
+	
+	
+	private function checkMasheryService() {
+		
+		if(!$this->isMasheryConnected()){
+			
+			throw new MasheryApiException("Unable to connect to Mashery service");
+		}
+	}
+	
+	private function getMasheryMember(){
+		
+		if(empty($this->masheryMember)){
+			
+			$this->masheryMember = $_SESSION[parent::SESSION_MEMBERWRITE];
+		}
+		return $this->masheryMember;
+	}
+	
+	private function isUpdatePassword(){
+		
+		return $_REQUEST['sfams_password'] != '';
+	}
+	
+	private function isOldSalesforceId(){
+		
+		return ($this->getUser()->getSalesforceId() != $this->getContactId());
+	}
+	
+	private function updatePassword(){
+
+		$password = $_REQUEST['sfams_password'];
+		$this->getUser()->setPassword(md5($password));
+		$_SESSION['new_password'][$this->getUser()->getUserName()] = $password;
+	}
+	
+	private function processOldSalesforceId(){
+
+		if($this->getUser()->getSalesforceId() == ""){
+			
+			$_SESSION[parent::SESSION_TOLOG][] = "(Salesforce ID : Added -> " . $this->getContactId() . ")";
+		}
+		else{
+			
+			$_SESSION[parent::SESSION_TOLOG][] = "(Salesforce ID : " . $this->getUser()->getSalesforceId() . " -> $this->getContactId())";
+		}
+			
+		$this->getUser()->setSalesforceId($this->getContactId());
+	}
+	
+	private function isNewUser(){
+		
+		return ($_REQUEST['newuser'] == 'true');
+	}
+	
+	private function isNewMasheryMember(){
+		
+		return ($_REQUEST['new_masherymember'] == 'true');
+	}
+	
+	private function isSendApiEmail(){
+		
+		return ($_REQUEST['send_api_welcome_email'] == 'on');
+	}
+	
+	private function isApiUser(){
+		
+		return ($_REQUEST['api_user'] == 'true');
+	}
+	
+	private function updateMashery(){
+		
+		//create mashery member
+		$this->masheryMember = $this->getMasheryHandler()->createMember($this->getMasheryMember());
+		
+		//create mashery application
+		$masheryApplication = $this->getMasheryHandler()->createApplication($this->masheryMember->getUsername() . 'application'
+																			, $this->masheryMember->getUsername());
+		
+		//create mashery apikey
+		$this->getMasheryHandler()->createApikey($this->getMasheryMember()->getUsername(), $masheryApplication->getId());
+	}
+	
+	private function updateUser(){
+		
+		$this->getUserInterface()->commitUser($this->getUser());
+	}
+	
+	private function updateUserHistory(){
+
+		$logs = implode("",$_SESSION[parent::SESSION_TOLOG]);
+		$reason = stripslashes($_REQUEST['reason']);
+			
+		$this->getUserInterface()->saveHistory( $_SESSION['AMS_USER_NAME'], $_SERVER['REMOTE_ADDR'], $this->getUser()->getId(), $logs, "SFAMS: " . $reason );
+	}
+	
+	private function updateUserMapping(){
+		
+		if($this->isAgencyUser())
+		{
+			$mappingTable = "agency";
+		}
+		else
+		{
+			$mappingTable = "contact";
+		}
+
+		$this->getMappingInterface()->updateUserMapping($this->getContactId()
+														,$this->getUser()->getId()
+														,$this->getMarketCode()
+														, $mappingTable);
+	}
+	
+
+	private function updateMasheryMapping(){
+
+		$this->getMappingInterface()->updateMasheryMapping($this->getMasheryMember()->getUsername()
+														,$this->getUser()->getId()
+														,$this->getMarketCode());
+	}
+	
+	private function getManagerInterface(){
+		
+		if(empty($this->managerInterface)){
+			
+			$this->managerInterface = &AppServer::getInterface( "ManagerInterface", $this->getDbPool() );
+		}
+		return $this->managerInterface;
+	}
+	
+	private function getLoginManager(){
+		
+		if(empty($this->loginManager)){
+			
+			$this->loginManager = $this->getManagerInterface()->getManager($_SESSION['AMS_USER_ID']);
+		}
+		return $this->loginManager;
+	}
+	
+	private function sendApiEmail() {
+
+		$mail = new Mailer();
+		$mail->setSender("support.". $this->getMarketCode()."@hitwise.com", "Experian Hitwise Support");
+		$mail->addRecipient($this->getMasheryMember()->getEmail(), $this->getMasheryMember()->getFirstName() . " " . $this->getMasheryMember()->getLastName());
+		
+		$mail->setSubject("Welcome to the Hitwise API!");
+ 	 	$mail->setHtmlMessage($this->buildApiEmailContent($this->getContactId(), $this->getUser()->getId(), $this->getMarketCode()));
+		$mail->send();
+	}
+	
+	private function buildApiEmailContent( $contactId, $userId, $mk )
+	{
+		
+		$emailBuilder = new EmailBuilder($mk);
+		
+		return $emailBuilder->buildApiEmailContent($contactId, $userId, false);
+	}
+}
+	
+</textarea>
+<br/>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<html>
+<head>
+<link rel="stylesheet" href="../../../css/SyntaxHighlighter.css" type="text/css" />
+<link rel="stylesheet" href="../../../css/samplecodes.css" type="text/css" />
+<script src="../../../js/shCore.js"></script>
+<script src="../../../js/shBrushPhp.js"></script>
+<script>
+    window.onload = function() {
+      dp.SyntaxHighlighter.HighlightAll("code");
+    }
+</script>
+</head>
+<body>
+
+<br/>
+
+<a name="large_class"></a>
+<textarea name="code" class="php:nogutter:nocontrols" >
+<?php
+require_once("library/GeneratePassword.php");
+
+abstract class screen_ContactConfirm{
+	
+	const KEY_CONTACTID = "contact_id";
+	const KEY_CONFIRM = "confirm";
+	
+	const SESSION_MEMBERWRITE = "memberWrite";
+	const SESSION_USERWRITE = "userWrite";
+	const SESSION_TOLOG = "toLog";
+	
+	/**
+	 * @var string
+	 */
+	private $dbPool;
+	
+	/**
+	 * @var MappingInterface
+	 */
+	private $mi;
+	
+	/**
+	 * @var string
+	 */
+	private $accountId;
+	
+	/**
+	 * @var Account
+	 */
+	private $account;
+	
+	/**
+	 * @var string
+	 */
+	private $contactId;
+	
+	/**
+	 * @var UserInterface
+	 */
+	private $ui;
+	
+	/**
+	 * @var MasheryHandler
+	 */
+	private $masheryHandler;
+	
+	/**
+	 * @var boolean
+	 */
+	private $masheryConnected;
+	
+	
+	public static function process(){
+		
+		/**
+		 * @var screen_ContactConfirm
+		 */
+		$contactConfirm;
+		
+		if(self::isConfirmSelected()){
+			
+			$contactConfirm = new screen_ContactConfirmExecuteConfirmation();
+		}
+		else {
+			
+			$contactConfirm = new screen_ContactConfirmDisplayPreview();
+		}
+		
+		$contactConfirm->execute();
+	}
+	
+	public abstract function execute();
+	
+	private static function isConfirmSelected() {
+		
+		return isset($_REQUEST[self::KEY_CONFIRM]) && $_REQUEST[self::KEY_CONFIRM] == "Yes";
+	}
+	
+	protected function getDbPool() {
+		
+		if(empty($this->dbPool)){
+			
+			$this->dbPool = sfamsConfig::getDbPool($this->getMarketCode());
+		}
+		
+		return $this->dbPool;
+	}
+	
+	/**
+	 * Get market code.
+	 */
+	protected function getMarketCode(){
+		
+		return $_REQUEST['market'];
+	}
+
+	/**
+	 * Get contactId either from $_REQUEST or $_SESSION
+	 */
+	protected function getContactId(){
+		
+		if(empty($this->contactId)){
+			
+			if(isset($_REQUEST[self::KEY_CONTACTID])){
+				$this->contactId = $_REQUEST[self::KEY_CONTACTID];
+				if($this->contactId != ""){
+					$_SESSION[self::KEY_CONTACTID] = $this->contactId;
+				}
+			}else{
+				$this->contactId = $_SESSION[self::KEY_CONTACTID];
+			}
+		}
+		
+		return $this->contactId;
+	}
+
+	/**
+	 * Get Account
+	 */
+	protected function getAccount(){
+		
+		if(empty($this->account)){
+			
+			$this->account = $_SESSION['accountData'];
+		}
+		
+		return $this->account;
+	}
+		
+	/**
+	 * Get accountId
+	 */
+	protected function getAccountId(){
+		
+		if(empty($this->accountId)){
+			
+			$this->accountId = $this->getAccount()->getId();
+		}
+		
+		return $this->accountId;
+	}
+	
+	protected function isHitwiseStaff() {
+		
+		// Hardcoded 'Experian Hitwise - Staff' SF account ID.
+		// All staff should be under this account, if its not, they should move
+		// instead of adding more IDs here.
+		
+		return $this->getAccountId() == '00120000000LxdpAAC';
+	}
+	
+	protected function isAgencyUser(){
+		
+		return isset($_REQUEST['agency_user']) && $_REQUEST['agency_user'] == 'Yes';
+	}
+
+	
+	protected function getUserInterface() {
+		
+		if(empty($this->ui)){
+			
+			$this->ui = AppServer::getInterface("UserInterface",$this->getDbPool());
+		}
+		
+		return $this->ui;
+	}
+	
+	protected function getMappingInterface() {
+		
+		if(empty($this->mi)){
+			
+			$this->mi = new MappingInterface();
+		}
+		
+		return $this->mi;
+	}
+	
+	protected function getMasheryHandler() {
+		
+		if(empty($this->masheryHandler)){
+			
+			$this->masheryHandler = new MasheryHandler();
+		}
+		
+		return $this->masheryHandler;
+	}
+	
+	protected function isMasheryConnected(){
+		
+		if($this->masheryConnected === null || $this->masheryConnected === ''){
+			
+			$this->masheryConnected = $this->getMasheryHandler()->isMasheryServiceConnected();
+		}
+		
+		return $this->masheryConnected;
+	}
+}
+
+?>
+
+	
+</textarea>
+<br/>
+
+</body>
+</html>
