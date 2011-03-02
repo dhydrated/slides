@@ -2,7 +2,8 @@ package org.dhydrated.app.slides.client.resources;
 
 import org.dhydrated.app.slides.client.model.Folder;
 import org.dhydrated.app.slides.client.model.TreeMenuItem;
-import org.dhydrated.app.slides.client.page.End;
+import org.dhydrated.app.slides.client.page.Cover;
+import org.dhydrated.app.slides.client.page.Reference;
 import org.dhydrated.app.slides.client.page.Introduction;
 import org.dhydrated.app.slides.client.page.casestudy.CaseStudy;
 import org.dhydrated.app.slides.client.page.clazz.Clazz;
@@ -23,6 +24,7 @@ public class DataProvider {
 
 		                new Folder("",
 		                    new TreeMenuItem[] {
+		                        new TreeMenuItem("Cover", "Cover", new Cover()),
 		                        new TreeMenuItem("Introduction", "Introduction", new Introduction())
 		                    }),
 
@@ -56,7 +58,7 @@ public class DataProvider {
 				                  
 	                    new Folder("",
 			                    new TreeMenuItem[] {
-			                        new TreeMenuItem("End", "End", new End())
+			                        new TreeMenuItem("References", "References", new Reference())
 			                    })
 		                    
 		                }),

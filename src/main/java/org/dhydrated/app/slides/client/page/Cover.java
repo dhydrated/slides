@@ -11,7 +11,7 @@ import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 
-public class End extends AbstractPage {
+public class Cover extends AbstractPage {
 
 	private static String SAMPLE_URL = "code/cleancode/functions.html";
 
@@ -32,9 +32,9 @@ public class End extends AbstractPage {
 		
 		vp.addText("<p>");
 		vp.addText("<ul>");
-		vp.addText("<li>Reference:</li>");
+		vp.addText("<li>by Taufek J.</li>");
+		vp.addText("<img src=\"images/big/fear_large.jpg\" alt=\"cover\" title=\"cover\" />");
 		vp.addText("<ul>");
-		vp.addText("<li>Clean Code. Prentice Hall. Robert C. Martin.<img src=\"images/icon/clean_code.png\" alt=\"Clean Code\" title=\"Clean Code\" /></li>");
 		vp.addText("</p>");
 
 		add(vp);

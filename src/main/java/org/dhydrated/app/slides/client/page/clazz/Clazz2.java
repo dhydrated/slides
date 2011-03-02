@@ -26,6 +26,8 @@ public class Clazz2 extends AbstractPage {
 	    vp.addText("<ul>");
 	    vp.addText("</p>");
 	    
+		vp.add(awardButton("You have received a \"Cool Classes\" award", null));
+	    
 	    add(vp);
 	    
 	}

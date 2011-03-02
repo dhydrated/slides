@@ -11,7 +11,7 @@ import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 
-public class Introduction extends AbstractPage {
+public class Reference extends AbstractPage {
 
 	private static String SAMPLE_URL = "code/cleancode/functions.html";
 
@@ -31,16 +31,19 @@ public class Introduction extends AbstractPage {
 
 		
 		vp.addText("<p>");
-		vp.addText("<ul>");
-		vp.addText("<li>What so important about clean code?.</li>");
-		vp.addText("<li>Smell codes effects the whole ecosystem. Not only developer.</li>");
-		vp.addText("<li>Topic is subjective.</li>");
-		vp.addText("<ul>");
+		vp.addText("Books:");
+		vp.addText("<li>Clean Code. Prentice Hall. Robert C. Martin.<img src=\"images/icon/clean_code.png\" alt=\"Clean Code\" title=\"Clean Code\" /></li>");
+		vp.addText("<li>Refactoring: Improving the Design of Existing Code. Martin Fowler.<img src=\"images/icon/fowler_refactoring.jpeg\" alt=\"Refactoring\" title=\"Refactoring\" /></li>");
+		vp.addText("<br/>");
+		vp.addText("<br/>");
+		vp.addText("Images:");
+		vp.addText("<li>Cover image. http://decomicshop.nl/four-color-fear-forgotten-horror-comics-of-the-1950s-tp-p-29490.html.</li>");
+		vp.addText("<li>Award icon. http://www.standard-icons.com/stock-icons/standard-portfolio/award-icon.gif.</li>");
 		vp.addText("</p>");
-
+		
 		add(vp);
 
-
+		
 	}
 
 	@Override
